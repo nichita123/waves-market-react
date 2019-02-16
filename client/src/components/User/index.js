@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import UserLayout from '../../hoc/UserLayout';
-import MyButton from '../utils/button';
+import UserLayout from "../../hoc/UserLayout";
+import MyButton from "../utils/button";
 
-const UserDashboard = () => {
+const UserDashboard = ({ user }) => {
   return (
     <UserLayout>
       <div>
@@ -11,11 +11,11 @@ const UserDashboard = () => {
           <h1>User information</h1>
 
           <div>
-            <span>name</span>
-            <span>lastname</span>
-            <span>email</span>
+            <span>{user.userData.name}</span>
+            <span>{user.userData.lastname}</span>
+            <span>{user.userData.email}</span>
           </div>
-          <MyButton 
+          <MyButton
             type="default"
             title="Edit account info"
             linkTo="/user/profile"
@@ -25,9 +25,7 @@ const UserDashboard = () => {
         <div className="user_nfo_panel">
           <h1>History of purchases</h1>
 
-          <div className="user_product_block_wrapper">
-            history
-          </div>
+          <div className="user_product_block_wrapper">history</div>
         </div>
       </div>
     </UserLayout>

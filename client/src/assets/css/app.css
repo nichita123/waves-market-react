@@ -293,16 +293,21 @@ header .cart_link {
   position: relative;
 }
 
-header .cart_link span {
+header .cart_link_counter{
+  width: 18px;
+  height: 18px;
   position: absolute;
   background: red;
   top: 2px;
   color: #ffff;
   left: -8px;
   border-radius: 50%;
-  padding: 0px 7px 2px 7px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
   font-size: 12px;
 }
+
 header .log_out_link {
   cursor: pointer;
   display: inline-block;

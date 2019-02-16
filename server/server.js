@@ -7,7 +7,8 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DATABASE);
+mongoose.connect(process.env.DATABASE, { useNewUrlParser: true });
+mongoose.set("useCreateIndex", true);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -19,11 +20,11 @@ const { Brand } = require("./models/brand");
 const { Wood } = require("./models/wood");
 const { Product } = require("./models/product");
 
-// Middlewares
+// MiddleWares
 const { auth } = require("./middleware/auth");
 const { admin } = require("./middleware/admin");
 
-app.all('/', function(req, res, next) {
+app.all("/", function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
@@ -39,23 +40,22 @@ app.all('/', function(req, res, next) {
 
 //BY Sell
 // /articles?sortBy=sold&order=desc&limit=4
-app.get('/api/product/articles', (req, res) => {
-  let order = req.query.order ? req.query.order : 'asc';
-  let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
+app.get("/api/product/articles", (req, res) => {
+  let order = req.query.order ? req.query.order : "asc";
+  let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
   let limit = req.query.limit ? parseInt(req.query.limit) : 100;
 
-  Product
-    .find()
-    .populate('brand')
-    .populate('wood')
+  Product.find()
+    .populate("brand")
+    .populate("wood")
     .sort([[sortBy, order]])
     .limit(limit)
     .exec((err, articles) => {
-      if(err) return res.status(400).send(err)
+      if (err) return res.status(400).send(err);
 
-      res.send(articles)
-    })
-})  
+      res.send(articles);
+    });
+});
 
 /// /api/product/article?id=HSHSHSKSK,JSJSJSJS,SDSDHHSHDS,JSJJSDJ&type=single
 app.get("/api/product/articles_by_id", (req, res) => {
@@ -189,7 +189,7 @@ app.post("/api/users/login", (req, res) => {
   });
 });
 
-app.get("/api/user/logout", auth, (req, res) => {
+app.get("/api/users/logout", auth, (req, res) => {
   User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, doc) => {
     if (err) return res.json({ success: false, err });
     return res.status(200).send({
