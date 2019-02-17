@@ -111,7 +111,7 @@ class Header extends Component {
       <header className="bck_b_light">
         <div className="container">
           <div className="left">
-            <div className="logo">Waves</div>
+            <Link to="/" className="logo">Waves</Link>
           </div>
 
           <div className="right">

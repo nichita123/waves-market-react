@@ -115,6 +115,7 @@ button {
   margin-top: 10px;
   font-family: "Oswald", sans-serif;
   font-size: 16px;
+  border: none;
 }
 
 .error_label {
@@ -235,7 +236,7 @@ select {
 
 .page_top {
   border-bottom: 1px solid #999592;
-  padding: 20px 0px;
+  padding: 20px;
   text-transform: uppercase;
 }
 
@@ -254,6 +255,7 @@ header .logo {
   color: #ffffff;
   font-size: 40px;
   padding: 11px 10px;
+  margin: 0;
 }
 
 header a {
@@ -266,6 +268,9 @@ header .container {
 
 header .container .left {
   width: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 header .container .right {
@@ -456,8 +461,7 @@ footer .business_nfo .nfo {
 ==============================*/
 
 .card_item_wrapper {
-  flex-grow: 1;
-  width: 25%;
+  flex-basis: 25%;
   padding: 0 20px;
   box-sizing: border-box;
   position: relative;
@@ -505,7 +509,7 @@ footer .business_nfo .nfo {
   padding: 15px 0 10px 0;
 }
 
-.card_item_wrapper .actions .button_wrapp:nth-child(1) {
+.card_item_wrapper .actions .button_wrap:nth-child(1) {
   flex-grow: 1;
   padding-right: 10px;
 }
@@ -561,16 +565,25 @@ footer .business_nfo .nfo {
       SHOP
 ==============================*/
 
+.shop{
+  min-height: 140vh;
+}
+
 .shop_wrapper {
   display: flex;
+  padding: 20px 10px;
 }
 
 .shop_wrapper .left {
-  flex-grow: 1;
+  flex-basis: 20%;
 }
 
 .shop_wrapper .right {
-  width: 800px;
+  flex-basis: 80%;
+}
+
+.collapse_items_wrapper{
+  cursor: pointer;
 }
 
 .collapse_title span {
@@ -717,6 +730,7 @@ footer .business_nfo .nfo {
 
 .register_login_container {
   display: flex;
+  align-items: baseline;
   border: 1px solid #999592;
   border-top: 5px solid #999592;
   -webkit-box-sizing: border-box;
@@ -728,7 +742,7 @@ footer .business_nfo .nfo {
 
 .register_login_container .left,
 .register_login_container .right {
-  flex: 1;
+  flex-basis: 50%;
 }
 
 .register_login_container h2 {
@@ -749,12 +763,14 @@ footer .business_nfo .nfo {
 
 .user_container {
   display: flex;
-  margin-bottom: 50px;
+  padding: 0 10px;
   min-height: 700px;
 }
 
 .user_container .user_left_nav {
-  border-right: 1px solid #f8f8f8;
+  border-right: 1px solid #dddddd;
+  flex-basis: 20%;
+  min-width: 240px;
 }
 
 .user_container .user_left_nav .links a {
@@ -763,11 +779,11 @@ footer .business_nfo .nfo {
   font-size: 20px;
   font-weight: 300;
   padding: 10px 0px;
-  width: 280px;
+  max-width: 280px;
 }
 
 .user_container .user_right {
-  flex-grow: 1;
+  flex-basis: 80%;
   padding: 0 0 0 29px;
 }
 
@@ -879,4 +895,98 @@ footer .business_nfo .nfo {
   background-size: contain !important;
   background-position: center center !important;
   border: 1px solid #eaeaea;
+}
+
+/* MEDIA QUERIES */
+
+@media (max-width: 1024px) {
+  .register_login_container{
+    margin: 0 !important;
+  }
+  .page_container{
+    min-height: 0;
+  }
+  .page_wrapper{
+    padding: 257px 40px;
+  }
+}
+
+@media (max-width: 887px) {
+  .card_item_wrapper{
+    flex-basis: 50% !important;
+  }
+  .featured_container .featured_image{
+    background-position: center !important;
+  }
+  .page_wrapper{
+    padding: 86px 40px;
+  }
+}
+
+@media (max-width: 470px){
+  .user_container{
+    flex-direction: column;
+  }
+  .user_container .user_left_nav{
+    border-right: none !important;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+  }
+}
+
+@media (max-width: 455px) {
+  .card_item_wrapper{
+    flex-basis: 100% !important;
+  }
+  .featured_container .featured_action{
+    top: 20% !important;
+  }
+  .home_promotion .tag.title{
+    font-size: 40px !important;
+  }
+  .home_promotion .tag.low_title{
+    font-size: 30px !important;
+  }
+  footer .wrapper{
+    flex-direction: column;
+  }
+  footer .left:last-child{
+    order: -1;
+  }
+  .register_login_container{
+    flex-direction: column;
+  }
+  .register_login_container .right{
+    order: -1;
+  }
+  .page_wrapper{
+    padding: 0;
+  }
+  header .container .left{
+    width: auto !important;
+  }
+  header .container .right .top{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  header .container .right .top, header .container .right .bottom{
+    padding: 7px 10px !important;
+  }
+  .shop_wrapper{
+    flex-direction: column !important;
+    
+  }
+  .shop_wrapper .left{
+    padding-bottom: 20px;
+  }
+  .page_top{
+    padding: 50px 0px 20px 10px !important;
+  }
+}
+
+@media (max-width: 320px) {
+  header .logo {
+    font-size: 35px !important;
+  }
 }
