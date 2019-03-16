@@ -1,16 +1,39 @@
 import axios from 'axios';
 
 import {
-  GET_PRODUCTS_BY_SELL,
   GET_PRODUCTS_BY_ARRIVAL,
-  GET_BRANDS,
-  GET_WOODS,
+  GET_PRODUCTS_BY_SELL,
   GET_PRODUCTS_TO_SHOP,
+  GET_PRODUCT_DETAIL,
+  CLEAR_PRODUCT_DETAIL,
+  CLEAR_PRODUCT,
   ADD_PRODUCT,
-  CLEAR_PRODUCT
+  GET_BRANDS,
+  ADD_BRAND,
+  GET_WOODS,
+  ADD_WOOD
 } from './types';
 
 import { PRODUCT_SERVER } from '../../components/utils/misc';
+
+export function getProductDetail(id){
+  const req = axios.get(`${PRODUCT_SERVER}/articles/id?id=${id}&type=single`)
+    .then(res => {
+      return res.data[0]
+    })
+
+  return {
+    type: GET_PRODUCT_DETAIL,
+    payload: req
+  }
+}
+
+export function clearProductDetail(){
+  return {
+    type: CLEAR_PRODUCT_DETAIL,
+    payload: ''
+  }
+}
 
 export function getProductsBySell(){
   //?sortBy=sold&order=desc&limit=4
@@ -90,6 +113,25 @@ export function getBrands(){
   }
 }
 
+export function addBrand(dataToSubmit, existingBrands){
+  const req = axios.post(`${PRODUCT_SERVER}/brand`, dataToSubmit)
+    .then(res => {
+      let brands = [
+        ...existingBrands,
+        res.data.brand
+      ];
+      return {
+        success: res.data.success,
+        brands
+      }
+    });
+
+    return {
+      type: ADD_BRAND,
+      payload: req
+    }
+}
+
 export function getWoods(){
   const req = axios.get(`${PRODUCT_SERVER}/woods`)
   .then(res => res.data)
@@ -98,4 +140,24 @@ export function getWoods(){
     type: GET_WOODS,
     payload: req
   }
+}
+
+export function addWood(dataToSubmit, existingWoods){
+  const req = axios.post(`${PRODUCT_SERVER}/wood`, dataToSubmit)
+    .then(res => {
+      let woods = [
+        ...existingWoods,
+        res.data.wood
+      ];
+
+      return {
+        success: res.data.success,
+        woods
+      }
+    });
+
+    return {
+      type: ADD_WOOD,
+      payload: req
+    }
 }

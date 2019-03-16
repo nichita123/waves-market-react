@@ -6,12 +6,14 @@ import Auth from "./hoc/auth";
 
 import Home from "./components/Home/";
 import Shop from './components/Shop';
+import Product from './components/Product';
 
 import RegisterLogin from "./components/Register_Login/";
 import Register from "./components/Register_Login/Register";
 
 import UserDashboard from "./components/User";
 import AddProduct from './components/User/Admin/AddProduct';
+import ManageCategories from './components/User/Admin/Categories/ManageCategories';
 
 const Routes = () => {
   return (
@@ -24,6 +26,9 @@ const Routes = () => {
           } />
           <Route path="/shop" exact component={
             Auth(Shop, null)
+          } />
+          <Route path="/product/detail/:id" exact component={
+            Auth(Product, null)
           } />
 
           {/* ======AUTHENTICATION====== */}
@@ -40,6 +45,9 @@ const Routes = () => {
           } />
           <Route path="/admin/products/add" exact component={
               Auth(AddProduct, true)
+          } />
+          <Route path="/admin/categories/manage" exact component={
+              Auth(ManageCategories, true)
           } />
         </Switch>
       </Layout>
