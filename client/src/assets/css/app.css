@@ -916,6 +916,11 @@ footer .business_nfo .nfo {
   border: 1px solid #eaeaea;
 }
 
+textarea{
+  border: 1px solid #999592 !important;
+  padding: 10px !important;
+}
+
 /* MEDIA QUERIES */
 
 @media (max-width: 1024px) {

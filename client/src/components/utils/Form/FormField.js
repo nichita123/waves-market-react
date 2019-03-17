@@ -1,5 +1,8 @@
 import React from "react";
 
+import TextField from '@material-ui/core/TextField';
+import Input from '@material-ui/core/Input';
+
 const FormField = ({ formData, change, id }) => {
   const showError = () => {
     let errorMessage = null;
@@ -64,11 +67,19 @@ const FormField = ({ formData, change, id }) => {
             {formData.showLabel ? (
               <div className="label_inputs">{formData.config.label}</div>
             ) : null}
-            <textarea
-              {...formData.config}
-              value={formData.value}
+            <TextField
+              {...formData.config !== formData.config.label}
+              placeholder={formData.config.placeholder}
+              multiline
+              variant="filled"
+              rows="4"
+              fullWidth
               onBlur={event => change({ event, id, blur: true })}
               onChange={event => change({ event, id })}
+              InputProps={{disableUnderline: true}}
+              style={{
+                marginTop: '10px'
+              }}
             />
             {showError()}
           </div>
