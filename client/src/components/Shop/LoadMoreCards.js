@@ -3,12 +3,18 @@ import React from 'react';
 import CardBlockShop from '../utils/card_block_shop';
 
 const LoadMoreCards = (props) => {
+
+  const handleLoginPage = () => {
+    this.props.history.push('/login')
+  }
+
   return (
     <div>
       <div>
         <CardBlockShop 
           grid={props.grid}
           products={props.products}
+          notLogged={handleLoginPage()}
         />
       </div>
 

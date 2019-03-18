@@ -4,10 +4,18 @@ import {
   LOGIN_USER,
   REGISTER_USER,
   AUTH_USER,
-  LOGOUT_USER
+  LOGOUT_USER,
+  ADD_TO_CART
 } from './types';
 
 import { USER_SERVER } from '../../components/utils/misc';
+
+export function addToCart(_id){
+  return {
+    type: ADD_TO_CART,
+    payload: ''
+  }
+}
 
 export function loginUser(dataToSubmit){
   const req = axios.post(`${USER_SERVER}/login`, dataToSubmit)

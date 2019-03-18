@@ -11,6 +11,8 @@ import ReduxThunk from "redux-thunk";
 
 import Reducer from "./redux/reducers";
 
+import ScrollToTop from './hoc/ScrollToTop';
+
 import "./assets/css/app.css";
 
 const createStoreWithMiddleware = applyMiddleware(
@@ -27,7 +29,9 @@ ReactDOM.render(
     )}
   >
     <BrowserRouter>
-      <Routes />
+      <ScrollToTop>
+        <Routes />
+      </ScrollToTop>
     </BrowserRouter>
   </Provider>,
 
