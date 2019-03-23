@@ -12,6 +12,7 @@ import RegisterLogin from "./components/Register_Login/";
 import Register from "./components/Register_Login/Register";
 
 import UserDashboard from "./components/User";
+import UserCart from './components/User/Cart';
 import AddProduct from './components/User/Admin/AddProduct';
 import ManageCategories from './components/User/Admin/Categories/ManageCategories';
 
@@ -42,6 +43,9 @@ const Routes = () => {
           {/* ===========ADMIN=========== */}
           <Route path="/user/dashboard" exact component={
               Auth(UserDashboard, true)
+          } />
+          <Route path="/user/cart" exact component={
+              Auth(UserCart, true)
           } />
           <Route path="/admin/products/add" exact component={
               Auth(AddProduct, true)

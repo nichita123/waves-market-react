@@ -21,8 +21,11 @@ import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faBars from "@fortawesome/fontawesome-free-solid/faBars";
 import faTh from "@fortawesome/fontawesome-free-solid/faTh";
 
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 class Shop extends Component {
   state = {
+    isLoading: true,
     grid: "",
     limit: 6,
     skip: 0,
@@ -41,6 +44,12 @@ class Shop extends Component {
     this.props.dispatch(
       getProductsToShop(this.state.skip, this.state.limit, this.state.filters)
     );
+
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      });
+    }, 1000);
   }
 
   handlePrice = value => {
@@ -162,6 +171,16 @@ class Shop extends Component {
                 </div>
               </div>
               <div>
+                {this.state.isLoading ? (
+                  <div className="main_loader">
+                    <CircularProgress
+                      style={{
+                        color: "#272723"
+                      }}
+                      thickness={7}
+                    />
+                  </div>
+                ) : null}
                 <LoadMoreCards
                   grid={this.state.grid}
                   limit={this.state.limit}

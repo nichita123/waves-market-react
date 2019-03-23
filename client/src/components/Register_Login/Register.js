@@ -118,7 +118,7 @@ class Register extends Component {
           if(res.payload.success){
             this.setState({
               formError: false,
-              formSuccess: true
+              formSuccess: true,
             });
 
             setTimeout(() => {

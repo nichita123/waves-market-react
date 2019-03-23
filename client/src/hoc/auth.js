@@ -44,7 +44,8 @@ export default function(ComposedClass, reload, adminRoute=null){
           <div className="main_loader">
             <CircularProgress 
               style={{
-                color: '#272723'
+                color: '#fff',
+                marginBottom: '1000px'
               }}
               thickness={7}
             />

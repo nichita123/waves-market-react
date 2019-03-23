@@ -2,15 +2,32 @@ const express = require("express");
 const app = express();
 
 const mongoose = require("mongoose");
-const cloudinary = require('cloudinary');
+const cloudinary = require("cloudinary");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const formidable = require('express-formidable');
+const formidable = require("express-formidable");
 
 require("dotenv").config();
 
+const options = {
+  autoIndex: false, // Don't build indexes
+  reconnectTries: 100, // Never stop trying to reconnect
+  reconnectInterval: 500, // Reconnect every 500ms
+  poolSize: 10, // Maintain up to 10 socket connections
+  // If not connected, return errors immediately rather than waiting for reconnect
+  bufferMaxEntries: 0,
+  useNewUrlParser: true
+};
+
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DATABASE, { useNewUrlParser: true });
+mongoose.connect(process.env.DATABASE, options).then(
+  () => {
+    console.log("connected to mongoDB");
+  },
+  err => {
+    console.log("err", err);
+  }
+);
 mongoose.set("useCreateIndex", true);
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -44,44 +61,43 @@ app.all("/", function(req, res, next) {
 //             PRODUCTS
 //=================================
 
-app.post('/api/product/shop', (req, res) => {
-  let order = req.body.order ? req.body.order : 'desc';
-  let sortBy = req.body.sortBy ? req.body.sortBy: '_id';
+app.post("/api/product/shop", (req, res) => {
+  let order = req.body.order ? req.body.order : "desc";
+  let sortBy = req.body.sortBy ? req.body.sortBy : "_id";
   let limit = req.body.limit ? parseInt(req.body.limit) : 100;
   let skip = parseInt(req.body.skip);
   let findArgs = {};
 
-  for(let key in req.body.filters){
-    if(req.body.filters[key].length > 0){
-      if(key === 'price'){
+  for (let key in req.body.filters) {
+    if (req.body.filters[key].length > 0) {
+      if (key === "price") {
         findArgs[key] = {
           $gte: req.body.filters[key][0],
           $lte: req.body.filters[key][1]
-        }
-      }else{
-        findArgs[key] = req.body.filters[key]
+        };
+      } else {
+        findArgs[key] = req.body.filters[key];
       }
     }
   }
 
-  findArgs['publish'] = true;
+  findArgs["publish"] = true;
 
-  Product
-    .find(findArgs)
+  Product.find(findArgs)
     .populate("brand")
     .populate("wood")
     .sort([[sortBy, order]])
     .skip(skip)
     .limit(limit)
-    .exec((err, articles ) => {
-      if(err) return res.status(400).send(err);
+    .exec((err, articles) => {
+      if (err) return res.status(400).send(err);
 
       res.status(200).json({
         size: articles.length,
         articles
-      })
-    })
-})
+      });
+    });
+});
 
 //BY ARRIVAL
 // /articles?sortBy=createdAt&order=desc&limit=4
@@ -105,8 +121,8 @@ app.get("/api/product/articles", (req, res) => {
     });
 });
 
-/// /api/product/article?id=HSHSHSKSK,JSJSJSJS,SDSDHHSHDS,JSJJSDJ&type=single
-app.get("/api/product/articles/id", (req, res) => {
+// /api/product/article?id=HSHSHSKSK,JSJSJSJS,SDSDHHSHDS,JSJJSDJ&type=single
+app.get("/api/product/articles-by-id", (req, res) => {
   let type = req.query.type;
   let items = req.query.id;
 
@@ -247,29 +263,117 @@ app.get("/api/users/logout", auth, (req, res) => {
 });
 
 //=================================
+//         Cart Actions
+//=================================
+
+app.post("/api/users/cart/add", auth, (req, res) => {
+  User.findOne({ _id: req.user._id }, (err, doc) => {
+    let duplicate = false;
+
+    doc.cart.forEach(item => {
+      if (item.id == req.query.productId) {
+        duplicate = true;
+      }
+    });
+
+    if (duplicate) {
+      User.findOneAndUpdate(
+        {
+          _id: req.user._id,
+          "cart.id": mongoose.Types.ObjectId(req.query.productId)
+        },
+        {
+          $inc: {
+            "cart.$.quantity": 1
+          }
+        },
+        {
+          new: true
+        },
+        () => {
+          if (err) return res.json({ success: false, err });
+          res.status(200).json(doc.cart);
+        }
+      );
+    } else {
+      User.findOneAndUpdate(
+        { _id: req.user._id },
+        {
+          $push: {
+            cart: {
+              id: mongoose.Types.ObjectId(req.query.productId),
+              quantity: 1,
+              date: Date.now()
+            }
+          }
+        },
+        { new: true },
+        (err, doc) => {
+          if (err) return res.json({ success: false, err });
+          res.status(200).json(doc.cart);
+        }
+      );
+    }
+  });
+});
+
+app.get('/api/users/cart/remove-item', auth, (req, res) => {
+  User.findOneAndUpdate(
+    {_id: req.user._id},
+    {"$pull": 
+      {"cart": 
+        {"id": mongoose.Types.ObjectId(req.query._id)}
+      }
+    },
+    {new: true},
+    (err, doc) => {
+      let cart = doc.cart;
+      let array = cart.map(item => {
+        return mongoose.Types.ObjectId(item.id)
+      });
+
+      Product
+        .find({'_id': {$in: array}})
+        .populate('brand')
+        .populate('wood')
+        .exec((err, cartDetail) => {
+          return res.status(200).json({
+            cartDetail,
+            cart
+          })
+        })
+    }
+  )
+})
+
+//=================================
 //              ADMIN
 //=================================
 
-app.post('/api/admin/upload-image', auth, admin, formidable(), (req, res) => {
-  cloudinary.uploader.upload(req.files.file.path, (result) => {
-    res.status(200).send({
-      public_id: result.public_id,
-      url: result.url
-    })
-  }, {
-    public_id: `${Date.now()}`,
-    resource_type: 'auto'
-  })
-})
+app.post("/api/admin/upload-image", auth, admin, formidable(), (req, res) => {
+  cloudinary.uploader.upload(
+    req.files.file.path,
+    result => {
+      res.status(200).send({
+        public_id: result.public_id,
+        url: result.url
+      });
+    },
+    {
+      public_id: `${Date.now()}`,
+      resource_type: "auto"
+    }
+  );
+});
 
-app.get('/api/admin/remove-image', auth, admin, (req, res) => {
+app.get("/api/admin/remove-image", auth, admin, (req, res) => {
   let image_id = req.query.public_id;
 
   cloudinary.uploader.destroy(image_id, (err, result) => {
-    if(err) return res.json({success: false, err});
-    res.status(200).send('ok');
-  })
-})
+    if (err) return res.json({ success: false, err });
+    res.status(200).send("ok");
+  });
+});
 
 const port = process.env.PORT || 3002;
 app.listen(port, () => {

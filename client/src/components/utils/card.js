@@ -40,9 +40,8 @@ class Card extends Component {
     <Snackbar
       anchorOrigin={{vertical, horizontal}}
       open={this.state.open}
-      autoHideDuration={null}
-      onClose={this.handleClose('clickaway')}
-      onClick={this.props.notLogged}
+      autoHideDuration={6000}
+      onClose={this.handleClose}
     >
       <MySnackbarContentWrapper
         onClose={this.handleClose}

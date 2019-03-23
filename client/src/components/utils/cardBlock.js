@@ -10,7 +10,6 @@ const CardBlock = (props) => {
           <Card 
             key={i}
             {...card}
-            notLogged={props.notLogged}
           />
       ))
       : null
