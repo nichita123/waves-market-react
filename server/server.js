@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 
+const async = require("async");
 const mongoose = require("mongoose");
 const cloudinary = require("cloudinary");
 const bodyParser = require("body-parser");
@@ -8,6 +9,8 @@ const cookieParser = require("cookie-parser");
 const formidable = require("express-formidable");
 
 require("dotenv").config();
+
+//ATMb8B5l9vZzS86CXpqM0QxJhBQebvEOO2RnOUpjMLkd-et2DH4Via4t6aobLIEZE-OridUhkO0PYt1Z
 
 const options = {
   autoIndex: false, // Don't build indexes
@@ -42,9 +45,11 @@ cloudinary.config({
 
 // Models
 const { User } = require("./models/user");
-const { Brand } = require("./models/brand");
+const { Site } = require("./models/site");
 const { Wood } = require("./models/wood");
+const { Brand } = require("./models/brand");
 const { Product } = require("./models/product");
+const { Payment } = require("./models/payment");
 
 // MiddleWares
 const { auth } = require("./middleware/auth");
@@ -262,6 +267,85 @@ app.get("/api/users/logout", auth, (req, res) => {
   });
 });
 
+app.post("/api/users/success-buy", auth, (req, res) => {
+  let history = [];
+  let transactionData = {};
+
+  // user history
+  req.body.cartDetail.forEach(item => {
+    history.push({
+      dateOfPurchase: Date.now(),
+      name: item.name,
+      brand: item.brand.name,
+      id: item._id,
+      price: item.price,
+      quantity: item.quantity,
+      paymentId: req.body.paymentData.paymentID
+    });
+  });
+
+  // payments dash
+  transactionData.user = {
+    id: req.user._id,
+    name: req.user.name,
+    lastname: req.user.lastname,
+    email: req.user.email
+  };
+
+  transactionData.data = req.body.paymentData;
+  transactionData.product = history;
+
+  User.findOneAndUpdate(
+    { _id: req.user._id },
+    {
+      $push: { history: history },
+      $set: { cart: [] }
+    },
+    { new: true },
+    (err, user) => {
+      if (err) return res.json({ success: false, err });
+
+      const payment = new Payment(transactionData);
+
+      payment.save((err, doc) => {
+        if (err) return res.json({ success: false, err });
+
+        let products = [];
+        doc.product.forEach(item => {
+          products.push({
+            id: item.id,
+            quantity: item.quantity
+          });
+        });
+
+        async.eachSeries(
+          products,
+          (item, callback) => {
+            Product.update(
+              { _id: item.id },
+              {
+                $inc: {
+                  sold: item.quantity
+                }
+              },
+              { new: false },
+              callback
+            );
+          },
+          err => {
+            if (err) return res.json({ success: false, err });
+            res.status(200).json({
+              success: true,
+              cart: user.cart,
+              cartDetail: []
+            });
+          }
+        );
+      });
+    }
+  );
+});
+
 //=================================
 //         Cart Actions
 //=================================
@@ -317,33 +401,45 @@ app.post("/api/users/cart/add", auth, (req, res) => {
   });
 });
 
-app.get('/api/users/cart/remove-item', auth, (req, res) => {
+app.get("/api/users/cart/remove-item", auth, (req, res) => {
   User.findOneAndUpdate(
-    {_id: req.user._id},
-    {"$pull": 
-      {"cart": 
-        {"id": mongoose.Types.ObjectId(req.query._id)}
-      }
-    },
-    {new: true},
+    { _id: req.user._id },
+    { $pull: { cart: { id: mongoose.Types.ObjectId(req.query._id) } } },
+    { new: true },
     (err, doc) => {
       let cart = doc.cart;
       let array = cart.map(item => {
-        return mongoose.Types.ObjectId(item.id)
+        return mongoose.Types.ObjectId(item.id);
       });
 
-      Product
-        .find({'_id': {$in: array}})
-        .populate('brand')
-        .populate('wood')
+      Product.find({ _id: { $in: array } })
+        .populate("brand")
+        .populate("wood")
         .exec((err, cartDetail) => {
           return res.status(200).json({
             cartDetail,
             cart
-          })
-        })
+          });
+        });
     }
-  )
+  );
+});
+
+app.post('/api/users/profile/edit', auth, (req, res) => {
+  User.findOneAndUpdate(
+    {_id: req.user._id},
+    {
+      "$set": req.body
+    },
+    {new: true},
+    (err, doc) => {
+      if (err) return res.json({ success: false, err });
+
+      return res.status(200).send({
+        success: true
+      })
+    }
+  );
 })
 
 //=================================
@@ -374,6 +470,38 @@ app.get("/api/admin/remove-image", auth, admin, (req, res) => {
     res.status(200).send("ok");
   });
 });
+
+//=================================
+//     ADMIN MANAGE SITE INFO
+//=================================
+
+app.get('/api/site/site-data', (req, res) => {
+  Site.find({}, (err, site) => {
+    if (err) return res.status(400).send(err);
+
+    res.status(200).send(site[0].siteInfo)
+  });
+});
+
+app.post('/api/site/site-data', auth, admin, (req, res) => {
+  Site.findOneAndUpdate(
+    {name: 'Site'},
+    {"$set": {
+      siteInfo: req.body
+    }},
+    {new: true},
+    (err, doc) => {
+      if (err) return res.json({ success: false, err });
+
+      return res.status(200)
+        .send({
+          success: true,
+          siteInfo: doc.siteInfo
+        })
+    } 
+  )
+})
+
 
 const port = process.env.PORT || 3002;
 app.listen(port, () => {

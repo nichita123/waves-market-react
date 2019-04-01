@@ -3,13 +3,19 @@ import React, { Component } from "react";
 import UserLayout from "../../hoc/UserLayout";
 
 import { connect } from "react-redux";
-import { getCartItems, removeCartItem } from "../../redux/actions/user_actions";
+import {
+  getCartItems,
+  removeCartItem,
+  onSuccessBuy
+} from "../../redux/actions/user_actions";
 
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faFrown from "@fortawesome/fontawesome-free-solid/faFrown";
 import faSmile from "@fortawesome/fontawesome-free-solid/faSmile";
 
 import ProductBlock from "../utils/User/product_block";
+
+import Paypal from "../utils/paypal";
 
 class Cart extends Component {
   state = {
@@ -53,17 +59,16 @@ class Cart extends Component {
     });
   };
 
-  removeFromCart = (id) => {
-    this.props.dispatch(removeCartItem(id))
-      .then(() => {
-        if(this.props.user.cartDetail.length <= 0){
-          this.setState({
-            showTotal: false
-          })
-        }else{
-          this.calculateTotal(this.props.user.cartDetail)
-        }
-      })
+  removeFromCart = id => {
+    this.props.dispatch(removeCartItem(id)).then(() => {
+      if (this.props.user.cartDetail.length <= 0) {
+        this.setState({
+          showTotal: false
+        });
+      } else {
+        this.calculateTotal(this.props.user.cartDetail);
+      }
+    });
   };
 
   showNotItemMessage = () => (
@@ -72,6 +77,32 @@ class Cart extends Component {
       <div>You have no items...</div>
     </div>
   );
+
+  transactionError = data => {
+    console.log("ERR");
+  };
+
+  transactionCanceled = () => {
+    console.log("Canceled");
+  };
+
+  transactionSuccess = data => {
+    this.props
+      .dispatch(
+        onSuccessBuy({
+          cartDetail: this.props.user.cartDetail,
+          paymentData: data
+        })
+      )
+      .then(() => {
+        if (this.props.user.successBuy) {
+          this.setState({
+            showTotal: false,
+            showSuccess: true
+          });
+        }
+      });
+  };
 
   render() {
     return (
@@ -86,7 +117,23 @@ class Cart extends Component {
             />
             {this.state.showTotal ? (
               <div className="user_cart_sum">
-                <div>
+                {this.state.showTotal ? (
+                  <div className="paypal_button_container">
+                    <Paypal
+                      toPay={this.state.total}
+                      transactionError={data => this.transactionError(data)}
+                      transactionCanceled={data =>
+                        this.transactionCanceled(data)
+                      }
+                      onSuccess={data => this.transactionSuccess(data)}
+                    />
+                  </div>
+                ) : null}
+                <div
+                  style={{
+                    margin: "10px 0"
+                  }}
+                >
                   Total amount: &nbsp;&nbsp;
                   <strong>${this.state.total}</strong>
                 </div>
@@ -100,12 +147,6 @@ class Cart extends Component {
               this.showNotItemMessage()
             )}
           </div>
-          {this.state.showTotal 
-            ? <div className="paypal_button_container">
-                Check out
-              </div>
-            : null
-          }
         </div>
       </UserLayout>
     );

@@ -713,6 +713,9 @@ footer .business_nfo .nfo {
 }
 .user_cart_sum {
   font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   text-transform: uppercase;
   border: 1px solid #e7e7e7;
   background: #f7f7f7;

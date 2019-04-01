@@ -13,8 +13,10 @@ import Register from "./components/Register_Login/Register";
 
 import UserDashboard from "./components/User";
 import UserCart from './components/User/Cart';
+import UpdateProfile from './components/User/UpdateUser/UpdateProfile';
 import AddProduct from './components/User/Admin/AddProduct';
 import ManageCategories from './components/User/Admin/Categories/ManageCategories';
+import ManageSiteNFO from './components/User/Admin/ManageSiteNFO';
 
 const Routes = () => {
   return (
@@ -47,11 +49,17 @@ const Routes = () => {
           <Route path="/user/cart" exact component={
               Auth(UserCart, true)
           } />
+          <Route path="/user/profile" exact component={
+              Auth(UpdateProfile, true)
+          } />
           <Route path="/admin/products/add" exact component={
               Auth(AddProduct, true)
           } />
           <Route path="/admin/categories/manage" exact component={
               Auth(ManageCategories, true)
+          } />
+          <Route path="/admin/site-info/manage" exact component={
+              Auth(ManageSiteNFO, true)
           } />
         </Switch>
       </Layout>

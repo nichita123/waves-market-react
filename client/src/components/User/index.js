@@ -3,9 +3,11 @@ import React, { Component } from "react";
 import UserLayout from "../../hoc/UserLayout";
 import MyButton from "../utils/button";
 
+import UserHistory from '../utils/User/history_block';
+
 class UserDashboard extends Component {
-  render(){
-    const { user } = this.props
+  render() {
+    const { user } = this.props;
     return (
       <UserLayout>
         <div>
@@ -22,17 +24,20 @@ class UserDashboard extends Component {
               linkTo="/user/profile"
             />
           </div>
-          <div className="user_nfo_panel">
-            <h1>History of purchases</h1>
-            <div className="user_product_block_wrapper">
-              history
+          {user.userData.history ? (
+            <div className="user_nfo_panel">
+              <h1>History of purchases</h1>
+              <div className="user_product_block_wrapper">
+                <UserHistory 
+                  products={user.userData.history}
+                />
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </UserLayout>
     );
   }
-
-};
+}
 
 export default UserDashboard;

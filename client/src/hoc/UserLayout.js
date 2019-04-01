@@ -22,7 +22,7 @@ const links = [
 const admin = [
   {
     name: 'Site info',
-    linkTo: '/admin/site/info'
+    linkTo: '/admin/site-info/manage'
   },
   {
     name: 'Add product',

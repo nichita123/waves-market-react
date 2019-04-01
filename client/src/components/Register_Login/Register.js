@@ -110,9 +110,9 @@ class Register extends Component {
     event.preventDefault();
 
     let dataToSubmit = generateData(this.state.formData, "register");
-    let fomrIsValid = isFormValid(this.state.formData, "register");
+    let formIsValid = isFormValid(this.state.formData, "register");
 
-    if (fomrIsValid) {
+    if (formIsValid) {
       this.props.dispatch(registerUser(dataToSubmit))
         .then(res => {
           if(res.payload.success){
