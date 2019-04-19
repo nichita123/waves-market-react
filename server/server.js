@@ -3,6 +3,7 @@ const app = express();
 
 const async = require("async");
 const mongoose = require("mongoose");
+const SHA1 = require("crypto-js/sha1");
 const cloudinary = require("cloudinary");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -12,7 +13,7 @@ require("dotenv").config();
 
 //ATMb8B5l9vZzS86CXpqM0QxJhBQebvEOO2RnOUpjMLkd-et2DH4Via4t6aobLIEZE-OridUhkO0PYt1Z
 
-const options = {
+const mongooseOptions = {
   autoIndex: false, // Don't build indexes
   reconnectTries: 100, // Never stop trying to reconnect
   reconnectInterval: 500, // Reconnect every 500ms
@@ -23,7 +24,7 @@ const options = {
 };
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DATABASE, options).then(
+mongoose.connect(process.env.DATABASE, mongooseOptions).then(
   () => {
     console.log("connected to mongoDB");
   },
@@ -61,6 +62,20 @@ app.all("/", function(req, res, next) {
 
   next();
 });
+
+//=================================
+//             UTILS
+//=================================
+
+// const date = new Date();
+// const po = `PO-${date.getSeconds()}${date.getMilliseconds()}-${SHA1('112fsdfase3rdsadfr34').toString().substring(0, 8)}`;
+
+// console.log(po);
+
+//=================================
+//        EMAIL SENDER
+//=================================
+const { sendEmail } = require("./utils/mail");
 
 //=================================
 //             PRODUCTS
@@ -227,7 +242,10 @@ app.post("/api/users/register", (req, res) => {
 
   user.save((err, doc) => {
     if (err) return res.json({ success: false, err });
-    res.status(200).json({
+
+    sendEmail(doc.email, doc.name, null, "welcome");
+
+    return res.status(200).json({
       success: true
     });
   });
@@ -270,10 +288,17 @@ app.get("/api/users/logout", auth, (req, res) => {
 app.post("/api/users/success-buy", auth, (req, res) => {
   let history = [];
   let transactionData = {};
+  const date = new Date();
+  const po = `PO-${date.getSeconds()}${date.getMilliseconds()}-${SHA1(
+    req.user._id
+  )
+    .toString()
+    .substring(0, 8)}`;
 
   // user history
   req.body.cartDetail.forEach(item => {
     history.push({
+      pOrder: po,
       dateOfPurchase: Date.now(),
       name: item.name,
       brand: item.brand.name,
@@ -292,7 +317,10 @@ app.post("/api/users/success-buy", auth, (req, res) => {
     email: req.user.email
   };
 
-  transactionData.data = req.body.paymentData;
+  transactionData.data = {
+    ...req.body.paymentData,
+    pOrder: po
+  };
   transactionData.product = history;
 
   User.findOneAndUpdate(
@@ -334,6 +362,15 @@ app.post("/api/users/success-buy", auth, (req, res) => {
           },
           err => {
             if (err) return res.json({ success: false, err });
+
+            sendEmail(
+              user.email,
+              user.name,
+              null,
+              "purchase",
+              transactionData
+            )
+
             res.status(200).json({
               success: true,
               cart: user.cart,
@@ -425,22 +462,22 @@ app.get("/api/users/cart/remove-item", auth, (req, res) => {
   );
 });
 
-app.post('/api/users/profile/edit', auth, (req, res) => {
+app.post("/api/users/profile/edit", auth, (req, res) => {
   User.findOneAndUpdate(
-    {_id: req.user._id},
+    { _id: req.user._id },
     {
-      "$set": req.body
+      $set: req.body
     },
-    {new: true},
+    { new: true },
     (err, doc) => {
       if (err) return res.json({ success: false, err });
 
       return res.status(200).send({
         success: true
-      })
+      });
     }
   );
-})
+});
 
 //=================================
 //              ADMIN
@@ -475,33 +512,33 @@ app.get("/api/admin/remove-image", auth, admin, (req, res) => {
 //     ADMIN MANAGE SITE INFO
 //=================================
 
-app.get('/api/site/site-data', (req, res) => {
+app.get("/api/site/site-data", (req, res) => {
   Site.find({}, (err, site) => {
     if (err) return res.status(400).send(err);
 
-    res.status(200).send(site[0].siteInfo)
+    res.status(200).send(site[0].siteInfo);
   });
 });
 
-app.post('/api/site/site-data', auth, admin, (req, res) => {
+app.post("/api/site/site-data", auth, admin, (req, res) => {
   Site.findOneAndUpdate(
-    {name: 'Site'},
-    {"$set": {
-      siteInfo: req.body
-    }},
-    {new: true},
+    { name: "Site" },
+    {
+      $set: {
+        siteInfo: req.body
+      }
+    },
+    { new: true },
     (err, doc) => {
       if (err) return res.json({ success: false, err });
 
-      return res.status(200)
-        .send({
-          success: true,
-          siteInfo: doc.siteInfo
-        })
-    } 
-  )
-})
-
+      return res.status(200).send({
+        success: true,
+        siteInfo: doc.siteInfo
+      });
+    }
+  );
+});
 
 const port = process.env.PORT || 3002;
 app.listen(port, () => {

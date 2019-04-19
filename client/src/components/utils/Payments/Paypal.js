@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PaypalExpressBtn from 'react-paypal-express-checkout';
 
 class Paypal extends Component {
+  
   render() {
 
     const onSuccess = (payment) => {
@@ -23,7 +24,7 @@ class Paypal extends Component {
 
     const client = {
       sandbox: 'ATMb8B5l9vZzS86CXpqM0QxJhBQebvEOO2RnOUpjMLkd-et2DH4Via4t6aobLIEZE-OridUhkO0PYt1Z',
-      production: ''
+      production: 'ASQcAHQhAX_Ddr8Vx3kNlZB2uGmk_0nQN9RuuSxTMlYpVnUQe_fF_xe9_ohT4EPpkFlHsbTKtrsgjfCG'
     }
 
     return (
@@ -38,10 +39,9 @@ class Paypal extends Component {
           onCancel={onCancel}
           style={{
             size: 'medium',
-            color: 'blue',
+            color: 'black',
             shape: 'rect',
-            label:  'pay',
-            layout: 'vertical'
+            label:  'checkout'
           }}
         />
       </div>

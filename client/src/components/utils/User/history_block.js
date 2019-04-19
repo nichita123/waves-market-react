@@ -11,6 +11,7 @@ const UserHistory = (props) => {
           <td>{product.brand} {product.name}</td>
           <td>$ {product.price}</td>
           <td>{product.quantity}</td>
+          <td>{product.pOrder}</td>
         </tr>
       ))
       : null
@@ -19,9 +20,9 @@ const UserHistory = (props) => {
     <div className="history_blocks">
       <table>
         <thead>
-          <tr>
+          <tr className="thead_tr">
             <th>
-              Date of purchase
+              Order date
             </th>
             <th>
               Product
@@ -31,6 +32,9 @@ const UserHistory = (props) => {
             </th>
             <th>
               Quantity
+            </th>
+            <th>
+              Order Number
             </th>
           </tr>
         </thead>
