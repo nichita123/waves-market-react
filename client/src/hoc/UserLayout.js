@@ -21,8 +21,8 @@ const links = [
 
 const admin = [
   {
-    name: 'Site info',
-    linkTo: '/admin/site-info/manage'
+    name: 'All products',
+    linkTo: '/admin/products'
   },
   {
     name: 'Add product',
@@ -33,9 +33,13 @@ const admin = [
     linkTo: '/admin/categories/manage'
   },
   {
-    name: 'Upload file',
-    linkTo: '/admin/file/add'
+    name: 'Site info',
+    linkTo: '/admin/site-info/manage'
   }
+  // {
+  //   name: 'Upload file',
+  //   linkTo: '/admin/file/add'
+  // }
 ]
 
 const UserLayout = (props) => {

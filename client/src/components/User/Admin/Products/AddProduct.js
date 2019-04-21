@@ -2,18 +2,18 @@ import React, { Component } from "react";
 
 import FormControl from "@material-ui/core/FormControl";
 
-import UserLayout from "../../../hoc/UserLayout";
+import UserLayout from "../../../../hoc/UserLayout";
 
-import FormField from "../../utils/Form/FormField";
+import FormField from "../../../utils/Form/FormField";
 import {
   update,
   generateData,
   isFormValid,
   populateOptionFields,
   resetFields
-} from "../../utils/Form/formActions";
+} from "../../../utils/Form/formActions";
 
-import FileUpload from "../../utils/Form/FileUpload";
+import FileUpload from "../../../utils/Form/FileUpload";
 
 import { connect } from "react-redux";
 
@@ -22,7 +22,7 @@ import {
   getWoods,
   addProduct,
   clearProduct
-} from "../../../redux/actions/product_actions";
+} from "../../../../redux/actions/product_actions";
 
 class AddProduct extends Component {
   state = {

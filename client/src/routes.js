@@ -17,7 +17,8 @@ import Register from "./components/Register_Login/Register";
 import UserDashboard from "./components/User";
 import UserCart from "./components/User/Cart";
 import UpdateProfile from "./components/User/UpdateUser/UpdateProfile";
-import AddProduct from "./components/User/Admin/AddProduct";
+import AllProducts from './components/User/Admin/Products/AllProducts';
+import AddProduct from "./components/User/Admin/Products/AddProduct";
 import AddFile from './components/User/Admin/AddFile';
 import ManageCategories from "./components/User/Admin/Categories/ManageCategories";
 import ManageSiteNFO from "./components/User/Admin/ManageSiteNFO";
@@ -55,6 +56,11 @@ const Routes = () => {
             path="/user/profile"
             exact
             component={Auth(UpdateProfile, true)}
+          />
+          <Route
+            path="/admin/products"
+            exact
+            component={Auth(AllProducts, true)}
           />
           <Route
             path="/admin/products/add"

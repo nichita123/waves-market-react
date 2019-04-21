@@ -965,6 +965,11 @@ footer .business_nfo .nfo {
   border-bottom: 1px solid #e5e5e5;
 }
 
+.cart_table_header .cart_table_th{
+  padding: 20px 10px;
+  font-size: 14px;
+}
+
 .cart_table_header th {
   padding: 1.555rem;
 }
@@ -1057,6 +1062,16 @@ footer .business_nfo .nfo {
   background-size: contain !important;
   background-position: center center !important;
   border: 1px solid #eaeaea;
+}
+
+.action_wrapper{
+  display: flex;
+  flex-direction: column;
+}
+
+.action_wrapper .up{
+  margin-top: 10px;
+  order: 1;
 }
 
 textarea{
