@@ -8,6 +8,9 @@ import Home from "./components/Home/";
 import Shop from "./components/Shop";
 import Product from "./components/Product";
 
+import ResetUser from './components/ResetUser';
+import ResetPass from './components/ResetUser/ResetPassword';
+
 import RegisterLogin from "./components/Register_Login/";
 import Register from "./components/Register_Login/Register";
 
@@ -38,6 +41,8 @@ const Routes = () => {
           {/* ======AUTHENTICATION====== */}
           <Route path="/login" exact component={Auth(RegisterLogin, false)} />
           <Route path="/register" exact component={Auth(Register, false)} />
+          <Route path="/reset-user" exact component={Auth(ResetUser, false)} />
+          <Route path="/reset-password/:token" exact component={Auth(ResetPass, false)} />
 
           {/* ===========ADMIN=========== */}
           <Route

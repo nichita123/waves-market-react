@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 
 const async = require("async");
-const multer = require('multer');
+const multer = require("multer");
+const moment = require("moment");
 const mongoose = require("mongoose");
 const SHA1 = require("crypto-js/sha1");
 const cloudinary = require("cloudinary");
@@ -225,6 +226,62 @@ app.get("/api/product/brands", (req, res) => {
 //              USERS
 //=================================
 
+app.post("/api/users/reset-user", (req, res) => {
+  User.findOne({ email: req.body.email }, (err, user) => {
+    try {
+      user.generateResetToken((err, user) => {
+        if (err) return res.json({ success: false, err });
+
+        sendEmail(user.email, user.name, null, "reset_password", user);
+
+        return res.json({ success: true });
+      });
+    } catch (error) {
+      if (error) return res.json({ success: false, error });
+    }
+  });
+});
+
+app.post("/api/users/reset-password", (req, res) => {
+  var today = moment()
+    .startOf("day")
+    .valueOf();
+
+  User.findOne(
+    {
+      resetToken: req.body.resetToken,
+      resetTokenExp: {
+        $gte: today
+      }
+    },
+    (err, user) => {
+      try {
+        if (!user)
+          return res.json({
+            success: false,
+            message: "Your token has expired, try again..."
+          });
+
+        user.password = req.body.password;
+        user.resetToken = "";
+        user.resetTokenExp = "";
+
+        user.save((err, doc) => {
+          if (err) return res.json({ success: false, err });
+
+          return res.status(200).json({ success: true });
+        });
+      } catch (err) {
+        if (err)
+          return res.json({
+            success: false,
+            message: "Your token has expired, try again..."
+          });
+      }
+    }
+  );
+});
+
 app.get("/api/users/auth", auth, (req, res) => {
   res.status(200).json({
     isAdmin: req.user.role === 0 ? false : true,
@@ -364,13 +421,7 @@ app.post("/api/users/success-buy", auth, (req, res) => {
           err => {
             if (err) return res.json({ success: false, err });
 
-            sendEmail(
-              user.email,
-              user.name,
-              null,
-              "purchase",
-              transactionData
-            )
+            sendEmail(user.email, user.name, null, "purchase", transactionData);
 
             res.status(200).json({
               success: true,
@@ -486,43 +537,41 @@ app.post("/api/users/profile/edit", auth, (req, res) => {
 
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/')
+    cb(null, "uploads/");
   },
-  filename:(req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`)
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}_${file.originalname}`);
   }
-})
-
-const upload = multer({storage}).single('file');
-
-app.post('/api/admin/upload-file', auth, admin, (req, res) => {
-  upload(req, res, (err) => {
-    if(err){
-      return res.json({success: false, err})
-    }
-    
-    return res.json({success: true})
-  })
 });
 
-const fs = require('fs');
-const path = require('path');
+const upload = multer({ storage }).single("file");
 
+app.post("/api/admin/upload-file", auth, admin, (req, res) => {
+  upload(req, res, err => {
+    if (err) {
+      return res.json({ success: false, err });
+    }
 
-app.get('/api/admin/files', auth, admin, (req, res) => {
-  const dir = path.resolve('.')+'/uploads/';
+    return res.json({ success: true });
+  });
+});
+
+const fs = require("fs");
+const path = require("path");
+
+app.get("/api/admin/files", auth, admin, (req, res) => {
+  const dir = path.resolve(".") + "/uploads/";
 
   fs.readdir(dir, (err, items) => {
     return res.status(200).send(items);
-  })
-})
+  });
+});
 
-app.get('/api/admin/download/:id', auth, admin, (req, res) => {
-  const file = path.resolve('.')+`/uploads/${req.params.id}`;
+app.get("/api/admin/download/:id", auth, admin, (req, res) => {
+  const file = path.resolve(".") + `/uploads/${req.params.id}`;
 
   res.download(file);
-})
-
+});
 
 app.post("/api/admin/upload-image", auth, admin, formidable(), (req, res) => {
   cloudinary.uploader.upload(

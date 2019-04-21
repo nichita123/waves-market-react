@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+
 import FormField from "../utils/Form/FormField";
 import { update, generateData, isFormValid } from "../utils/Form/formActions";
-import { withRouter } from "react-router-dom";
+
+import { withRouter, Link } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { loginUser } from "../../redux/actions/user_actions";
@@ -143,6 +145,7 @@ class Login extends Component {
             <div className="error_label">Please check your data</div>
           ) : null}
           <button onClick={event => this.submitForm(event)}>Log in</button>
+          <Link to="/reset-user">Forgot password?</Link>
         </form>
       </div>
     );

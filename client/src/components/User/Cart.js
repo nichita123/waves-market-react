@@ -143,12 +143,12 @@ class Cart extends Component {
                     transactionCanceled={data => this.transactionCanceled(data)}
                     onSuccess={data => this.transactionSuccess(data)}
                   />
-                  <button
+                  {/* <button
                     onClick={this.handleClickOpen}
                     className="link_default"
                   >
                     Checkout with card
-                  </button>
+                  </button> */}
                 </div>
               ) : null}
 
