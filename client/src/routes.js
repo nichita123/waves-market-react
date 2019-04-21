@@ -15,9 +15,9 @@ import UserDashboard from "./components/User";
 import UserCart from "./components/User/Cart";
 import UpdateProfile from "./components/User/UpdateUser/UpdateProfile";
 import AddProduct from "./components/User/Admin/AddProduct";
+import AddFile from './components/User/Admin/AddFile';
 import ManageCategories from "./components/User/Admin/Categories/ManageCategories";
 import ManageSiteNFO from "./components/User/Admin/ManageSiteNFO";
-import AddFile from './components/User/Admin/AddFile';
 
 import PAGE_NOT_FOUND from "./components/utils/page_not_found";
 

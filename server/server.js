@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 
 const async = require("async");
+const multer = require('multer');
 const mongoose = require("mongoose");
 const SHA1 = require("crypto-js/sha1");
 const cloudinary = require("cloudinary");
@@ -482,6 +483,46 @@ app.post("/api/users/profile/edit", auth, (req, res) => {
 //=================================
 //              ADMIN
 //=================================
+
+let storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/')
+  },
+  filename:(req, file, cb) => {
+    cb(null, `${Date.now()}_${file.originalname}`)
+  }
+})
+
+const upload = multer({storage}).single('file');
+
+app.post('/api/admin/upload-file', auth, admin, (req, res) => {
+  upload(req, res, (err) => {
+    if(err){
+      return res.json({success: false, err})
+    }
+    
+    return res.json({success: true})
+  })
+});
+
+const fs = require('fs');
+const path = require('path');
+
+
+app.get('/api/admin/files', auth, admin, (req, res) => {
+  const dir = path.resolve('.')+'/uploads/';
+
+  fs.readdir(dir, (err, items) => {
+    return res.status(200).send(items);
+  })
+})
+
+app.get('/api/admin/download/:id', auth, admin, (req, res) => {
+  const file = path.resolve('.')+`/uploads/${req.params.id}`;
+
+  res.download(file);
+})
+
 
 app.post("/api/admin/upload-image", auth, admin, formidable(), (req, res) => {
   cloudinary.uploader.upload(
