@@ -8,6 +8,7 @@ import {
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT,
   ADD_PRODUCT,
+  REMOVE_PRODUCT,
   GET_BRANDS,
   ADD_BRAND,
   GET_WOODS,
@@ -88,6 +89,16 @@ export function addProduct(dataToSubmit){
 
     return {
       type: ADD_PRODUCT,
+      payload: req
+    }
+}
+
+export function removeProduct(id){
+  const req = axios.delete(`${PRODUCT_SERVER}/article/${id}`)
+    .then(res => res.data)
+
+    return {
+      type: REMOVE_PRODUCT,
       payload: req
     }
 }

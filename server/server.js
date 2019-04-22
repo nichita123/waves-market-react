@@ -176,6 +176,23 @@ app.post("/api/product/article", auth, admin, (req, res) => {
   });
 });
 
+app.delete("/api/product/article/:id", auth, admin, (req, res) => {
+  Product.findById(req.params.id).exec((err, product) => {
+    
+    try {
+      if (err) return res.status(422).json({ success: false, err });
+
+      product.remove(err => {
+        if (err) return res.status(422).json({ success: false, err });
+
+        return res.status(200).json({ success: true });
+      });
+    } catch (error) {
+      return res.status(422).json({ success: false, err });
+    }
+  });
+});
+
 //=================================
 //              WOODS
 //=================================

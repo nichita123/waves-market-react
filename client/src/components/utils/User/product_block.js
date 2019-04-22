@@ -5,7 +5,9 @@ import faRedo from "@fortawesome/fontawesome-free-solid/faRedo";
 
 import moment from "moment";
 
-const ProductBlock = ({ products, removeItem, type }) => {
+const ProductBlock = ({
+   products, removeItem, editProduct, type 
+}) => {
   const renderCartImage = images => {
     if (images.length > 0) {
       return images[0].url;
@@ -115,22 +117,20 @@ const ProductBlock = ({ products, removeItem, type }) => {
               <p>${product.price}</p>
             </td>
             <td width="2%" className="remove ta_center">
-            <div className="action_wrapper">
-              <div className="up">
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  onClick={() => removeItem(product._id)}
-                />
+              <div className="action_wrapper">
+                <div className="up">
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    onClick={() => removeItem(product._id)}
+                  />
+                </div>
+                <div className="down">
+                  <FontAwesomeIcon
+                    icon={faRedo}
+                    onClick={() => editProduct(product._id)}
+                  />
+                </div>
               </div>
-              <div className="down">
-                <FontAwesomeIcon
-                  icon={faRedo}
-                  onClick={() => removeItem(product._id)}
-                />
-              </div>
-            </div>
-             
-              
             </td>
           </tr>
         ))
