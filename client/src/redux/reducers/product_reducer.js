@@ -5,6 +5,8 @@ import {
   GET_PRODUCT_DETAIL,
   CLEAR_PRODUCT_DETAIL,
   ADD_PRODUCT,
+  EDIT_PRODUCT,
+  CLEAR_EDIT_PRODUCT,
   REMOVE_PRODUCT,
   CLEAR_PRODUCT,
   GET_BRANDS,
@@ -37,12 +39,17 @@ export default function(state = {}, action) {
     case ADD_PRODUCT:
       return { ...state, addProduct: action.payload };
 
+    case EDIT_PRODUCT:
+      return { ...state, updateProductDetail: action.payload };
+
+    case CLEAR_EDIT_PRODUCT:
+      return { ...state, clearUpdateProductDetail: action.payload };
+
     case REMOVE_PRODUCT:
       return { ...state, removeProduct: action.payload };
 
     case CLEAR_PRODUCT:
       return { ...state, addProduct: action.payload };
-
 
     case GET_BRANDS:
       return { ...state, brands: action.payload };

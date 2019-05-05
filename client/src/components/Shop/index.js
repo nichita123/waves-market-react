@@ -34,7 +34,8 @@ class Shop extends Component {
       frets: [],
       wood: [],
       price: []
-    }
+    },
+    publish: true
   };
 
   componentDidMount() {

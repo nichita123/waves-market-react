@@ -88,9 +88,9 @@ class UpdatePersonalNFO extends Component {
     event.preventDefault();
 
     let dataToSubmit = generateData(this.state.formData, "update_user");
-    let fomrIsValid = isFormValid(this.state.formData, "update_user");
+    let formIsValid = isFormValid(this.state.formData, "update_user");
 
-    if (fomrIsValid) {
+    if (formIsValid) {
       this.props.dispatch(updateUserProfile(dataToSubmit))
         .then(() => {
           if(this.props.user.updateUser.success){

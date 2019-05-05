@@ -69,6 +69,7 @@ const FormField = ({ formData, change, id }) => {
             ) : null}
             <TextField
               {...formData.config !== formData.config.label}
+              value={formData.value}
               placeholder={formData.config.placeholder}
               multiline
               rows="4"

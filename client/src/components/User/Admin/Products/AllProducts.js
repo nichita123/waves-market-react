@@ -99,7 +99,7 @@ class AllProducts extends Component {
             type="all_products"
             removeItem={id => this.removeProduct(id)}
             editProduct={(id) => this.goToEditProduct(id)}
-          />
+        />
       </UserLayout>
     );
   }

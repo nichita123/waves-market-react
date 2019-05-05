@@ -9,6 +9,8 @@ import Snackbar from "@material-ui/core/Snackbar";
 
 import MySnackbarContentWrapper from "./Snackbars";
 
+import Tooltip from "@material-ui/core/Tooltip";
+
 class Card extends Component {
   state = {
     open: false,
@@ -38,7 +40,7 @@ class Card extends Component {
 
   renderPopUp = (vertical, horizontal) => (
     <Snackbar
-      anchorOrigin={{vertical, horizontal}}
+      anchorOrigin={{ vertical, horizontal }}
       open={this.state.open}
       autoHideDuration={6000}
       onClose={this.handleClose}
@@ -48,15 +50,15 @@ class Card extends Component {
         variant="error"
         message="You must be logged in"
         addStyles={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
           fontFamily: "Oswald, sans-serif",
-          letterSpacing: '0.3px',
-          fontSize: '16px'
+          letterSpacing: "0.3px",
+          fontSize: "16px"
         }}
         addPadding={{
-          paddingRight: '5px'
+          paddingRight: "5px"
         }}
       />
     </Snackbar>
@@ -66,7 +68,7 @@ class Card extends Component {
     const props = this.props;
     return (
       <div className={`card_item_wrapper ${props.grid}`}>
-      {this.renderPopUp(this.state.vertical, this.state.horizontal)}
+        {this.renderPopUp(this.state.vertical, this.state.horizontal)}
         <div
           className="image"
           style={{
@@ -84,11 +86,7 @@ class Card extends Component {
 
           {props.grid ? (
             <div className="description">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              Inventore tenetur quos, praesentium quasi molestiae omnis aliquid
-              ratione aspernatur aut, fugiat, ut magnam. Placeat temporibus
-              labore modi mollitia, tempora, nobis sed voluptatum aut, fugiat
-              exercitationem saepe vitae corporis voluptas ducimus possimus?
+              {props.desc}
             </div>
           ) : null}
           <div className="actions">
@@ -103,21 +101,22 @@ class Card extends Component {
                 }}
               />
             </div>
-
-            <div className="button_wrap">
-              <MyButton
-                type="bag_link"
-                runAction={() => {
-                  props.user.userData.isAuth
-                    ? this.props.dispatch(addToCart(props._id))
-                    : this.setState({
-                      open: true,
-                      vertical: "top",
-                      horizontal: "right"
-                    })
-                }}
-              />
-            </div>
+            <Tooltip title="Add to cart" placement="top-end">
+              <div className="button_wrap">
+                <MyButton
+                  type="bag_link"
+                  runAction={() => {
+                    props.user.userData.isAuth
+                      ? this.props.dispatch(addToCart(props._id))
+                      : this.setState({
+                          open: true,
+                          vertical: "top",
+                          horizontal: "right"
+                        });
+                  }}
+                />
+              </div>
+            </Tooltip>
           </div>
         </div>
       </div>

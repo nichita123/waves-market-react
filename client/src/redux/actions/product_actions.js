@@ -7,6 +7,8 @@ import {
   GET_PRODUCT_DETAIL,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT,
+  EDIT_PRODUCT,
+  CLEAR_EDIT_PRODUCT,
   ADD_PRODUCT,
   REMOVE_PRODUCT,
   GET_BRANDS,
@@ -61,7 +63,7 @@ export function getProductsToShop(skip, limit, filters=[], previousState=[]){
   const data = {
     limit,
     skip,
-    filters
+    filters,
   }
 
   const req = axios.post(`${PRODUCT_SERVER}/shop`, data)
@@ -91,6 +93,25 @@ export function addProduct(dataToSubmit){
       type: ADD_PRODUCT,
       payload: req
     }
+}
+
+
+
+export function updateProduct(id, dataToSubmit){
+  const req = axios.post(`${PRODUCT_SERVER}/article/${id}`, dataToSubmit)
+    .then(res => res.data);
+
+    return {
+      type: EDIT_PRODUCT,
+      payload: req
+    }
+}
+
+export function clearUpdateProduct(){
+  return { 
+    type: CLEAR_EDIT_PRODUCT,
+    payload: ''
+  }
 }
 
 export function removeProduct(id){

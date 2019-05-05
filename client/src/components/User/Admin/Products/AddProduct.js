@@ -302,6 +302,7 @@ class AddProduct extends Component {
               <FileUpload
                 imagesHandler={images => this.imagesHandler(images)}
                 reset={this.state.formSuccess}
+                edit={false}
               />
 
               <FormField

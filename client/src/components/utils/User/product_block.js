@@ -2,12 +2,11 @@ import React from "react";
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faTrash from "@fortawesome/fontawesome-free-solid/faTrash";
 import faRedo from "@fortawesome/fontawesome-free-solid/faRedo";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import moment from "moment";
 
-const ProductBlock = ({
-   products, removeItem, editProduct, type 
-}) => {
+const ProductBlock = ({ products, removeItem, editProduct, type }) => {
   const renderCartImage = images => {
     if (images.length > 0) {
       return images[0].url;
@@ -47,10 +46,12 @@ const ProductBlock = ({
               ${product.price * product.quantity}
             </td>
             <td className="remove ta_center">
+            <Tooltip title="Remove from cart">
               <FontAwesomeIcon
                 icon={faTrash}
                 onClick={() => removeItem(product._id)}
               />
+            </Tooltip>
             </td>
           </tr>
         ))
@@ -119,16 +120,20 @@ const ProductBlock = ({
             <td width="2%" className="remove ta_center">
               <div className="action_wrapper">
                 <div className="up">
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    onClick={() => removeItem(product._id)}
-                  />
+                  <Tooltip title="Remove" placement="right-start">
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      onClick={() => removeItem(product._id)}
+                    />
+                  </Tooltip>
                 </div>
                 <div className="down">
-                  <FontAwesomeIcon
-                    icon={faRedo}
-                    onClick={() => editProduct(product._id)}
-                  />
+                  <Tooltip title="Edit" placement="right-start">
+                    <FontAwesomeIcon
+                      icon={faRedo}
+                      onClick={() => editProduct(product._id)}
+                    />
+                  </Tooltip>
                 </div>
               </div>
             </td>

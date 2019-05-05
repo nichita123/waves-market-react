@@ -13,6 +13,7 @@ import {
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faFrown from "@fortawesome/fontawesome-free-solid/faFrown";
 import faSmile from "@fortawesome/fontawesome-free-solid/faSmile";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import ProductBlock from "../utils/User/product_block";
 
@@ -53,6 +54,11 @@ class Cart extends Component {
           });
       }
     }
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      })
+    }, 1500);
   }
 
   calculateTotal = cartDetail => {
@@ -72,7 +78,8 @@ class Cart extends Component {
     this.props.dispatch(removeCartItem(id)).then(() => {
       if (this.props.user.cartDetail.length <= 0) {
         this.setState({
-          showTotal: false
+          showTotal: false,
+          isLoading: false
         });
       } else {
         this.calculateTotal(this.props.user.cartDetail);
@@ -80,12 +87,24 @@ class Cart extends Component {
     });
   };
 
-  showNotItemMessage = () => (
-    <div className="cart_no_items">
-      <FontAwesomeIcon icon={faFrown} />
-      <div>Your cart is empty...</div>
-    </div>
-  );
+  showNotItemMessage = () =>
+    this.state.isLoading ? (
+      <div
+        className="main_loader"
+      >
+        <CircularProgress
+          style={{
+            color: "#272723"
+          }}
+          thickness={7}
+        />
+      </div>
+    ) : (
+      <div className="cart_no_items">
+        <FontAwesomeIcon icon={faFrown} />
+        <div>Your cart is empty...</div>
+      </div>
+    );
 
   transactionError = data => {
     console.log("ERR");
@@ -181,7 +200,7 @@ class Cart extends Component {
               {"Checkout with cart"}
             </DialogTitle>
             <DialogContent>
-              <StripePayment 
+              <StripePayment
                 onSuccess={data => this.transactionSuccess(data)}
               />
             </DialogContent>

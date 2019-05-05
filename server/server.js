@@ -103,8 +103,6 @@ app.post("/api/product/shop", (req, res) => {
     }
   }
 
-  findArgs["publish"] = true;
-
   Product.find(findArgs)
     .populate("brand")
     .populate("wood")
@@ -176,9 +174,32 @@ app.post("/api/product/article", auth, admin, (req, res) => {
   });
 });
 
+app.post("/api/product/article/:id", auth, admin, (req, res) => {
+  Product.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        ...req.body
+      }
+    },
+    { new: true },
+    (err, doc) => {
+      
+      try {
+        if (err) return res.json({ success: false, err });
+        return res.status(200).send({
+          success: true,
+          updatedArticle: doc
+        });
+      } catch (error) {
+        return res.status(422).json({ success: false, error });
+      }
+    }
+  );
+});
+
 app.delete("/api/product/article/:id", auth, admin, (req, res) => {
   Product.findById(req.params.id).exec((err, product) => {
-    
     try {
       if (err) return res.status(422).json({ success: false, err });
 

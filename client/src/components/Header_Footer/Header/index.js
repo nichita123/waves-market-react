@@ -6,6 +6,28 @@ import { connect } from "react-redux";
 
 import { logoutUser } from "../../../redux/actions/user_actions";
 
+import IconButton from '@material-ui/core/IconButton';
+import Badge from '@material-ui/core/Badge';
+import { withStyles } from '@material-ui/core/styles';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+
+import PropTypes from 'prop-types';
+
+
+const styles = theme => ({
+  badge: {
+    top: '30%',
+    right: 28,
+    // The border color match the background color.
+    border: `2px solid ${
+      theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[900]
+    }`,
+  },
+  root: {
+    padding: '0'
+  },
+});
+
 class Header extends Component {
   state = {
     page: [
@@ -67,15 +89,28 @@ class Header extends Component {
       </Link>
     );
 
+
+
   cartLink = (item, i) => {
     const user = this.props.user.userData;
+    const { classes } = this.props;
+
 
     return (
-      <div className="cart_link" key={i}>
-        <div className="cart_link_counter">
-          <span>{user.cart ? user.cart.length : 0}</span>
-        </div>
-        <Link to={item.linkTo}>{item.name}</Link>
+      <div className="cart_link" key={i} style={{display: 'inline-flex', alignItems: 'center'}}>
+          <span>{user.cart 
+            ? <IconButton aria-label="Cart" classes={{root: classes.root}}>
+                <Badge badgeContent={user.cart.length} color="primary" classes={{ badge: classes.badge }}>
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            : <IconButton aria-label="Cart">
+                <Badge badgeContent={0} color="primary">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+          }</span>
+        <Link style={{marginLeft: '0'}} to={item.linkTo}>{item.name}</Link>
       </div>
     );
   };
@@ -107,6 +142,10 @@ class Header extends Component {
   };
 
   render() {
+    
+
+   
+    
     return (
       <header className="bck_b_light">
         <div className="container">
@@ -115,7 +154,7 @@ class Header extends Component {
           </div>
 
           <div className="right">
-            <div className="top">{this.showLinks(this.state.user)}</div>
+            <div className="top" style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>{this.showLinks(this.state.user)}</div>
 
             <div className="bottom">{this.showLinks(this.state.page)}</div>
           </div>
@@ -131,4 +170,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(withRouter(Header));
+Header.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default connect(mapStateToProps)(withRouter(withStyles(styles)(Header)));
