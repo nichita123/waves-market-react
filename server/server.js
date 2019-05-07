@@ -13,8 +13,6 @@ const formidable = require("express-formidable");
 
 require("dotenv").config();
 
-//ATMb8B5l9vZzS86CXpqM0QxJhBQebvEOO2RnOUpjMLkd-et2DH4Via4t6aobLIEZE-OridUhkO0PYt1Z
-
 const mongooseOptions = {
   autoIndex: false, // Don't build indexes
   reconnectTries: 100, // Never stop trying to reconnect
@@ -39,6 +37,7 @@ mongoose.set("useCreateIndex", true);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(express.static("client/build"));
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -184,7 +183,6 @@ app.post("/api/product/article/:id", auth, admin, (req, res) => {
     },
     { new: true },
     (err, doc) => {
-      
       try {
         if (err) return res.json({ success: false, err });
         return res.status(200).send({
@@ -667,6 +665,15 @@ app.post("/api/site/site-data", auth, admin, (req, res) => {
     }
   );
 });
+
+// DEFAULT //
+if (process.env.NODE_ENV === "production") {
+  const path = require("path");
+
+  app.get("/*", (req, res) => {
+    res.sendfile(path.resolve(__dirname, "../client", "build", "index.html"));
+  });
+}
 
 const port = process.env.PORT || 3002;
 app.listen(port, () => {
