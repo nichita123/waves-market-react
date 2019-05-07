@@ -6,31 +6,17 @@ import { connect } from "react-redux";
 
 import { logoutUser } from "../../../redux/actions/user_actions";
 
-import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
-import { withStyles } from '@material-ui/core/styles';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ShowLinks from "../../utils/header_links";
 
-import PropTypes from 'prop-types';
-
-
-const styles = theme => ({
-  badge: {
-    top: '30%',
-    right: 28,
-    // The border color match the background color.
-    border: `2px solid ${
-      theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[900]
-    }`,
-  },
-  root: {
-    padding: '0'
-  },
-});
+import { getCartItems, removeCartItem } from "../../../redux/actions/user_actions";
 
 class Header extends Component {
   state = {
-    page: [
+    openDropDown: false,
+    total: 0,
+    showTotal: false,
+    isLoading: true,
+    pageLinks: [
       {
         name: "Home",
         linkTo: "/",
@@ -42,7 +28,7 @@ class Header extends Component {
         public: true
       }
     ],
-    user: [
+    userLinks: [
       {
         name: "My Cart",
         linkTo: "/user/cart",
@@ -66,6 +52,72 @@ class Header extends Component {
     ]
   };
 
+  peekCartItems = user => {
+    let cartItems = [];
+
+    if (user.userData.cart) {
+      if (user.userData.cart.length > 0) {
+        user.userData.cart.forEach(item => {
+          cartItems.push(item.id);
+        });
+
+        this.props
+          .dispatch(getCartItems(cartItems, user.userData.cart))
+          .then(() => {
+            if (this.props.user.cartDetail.length > 0) {
+              this.calculateTotal(this.props.user.cartDetail);
+            }
+          });
+      }
+    }
+
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+      });
+    }, 1000);
+  };
+
+  calculateTotal = cartDetail => {
+    let total = 0;
+
+    cartDetail.forEach(item => {
+      total += parseInt(item.price, 10) * item.quantity;
+    });
+
+    this.setState({
+      total,
+      showTotal: true
+    });
+  };
+
+  removeFromCart = id => {
+    this.props.dispatch(removeCartItem(id)).then(() => {
+      if (this.props.user.cartDetail.length <= 0) {
+        this.setState({
+          showTotal: false,
+          isLoading: false
+        });
+      } else {
+        this.calculateTotal(this.props.user.cartDetail);
+      }
+    });
+  };
+
+  handleOpenDropDown = () => {
+    this.setState({
+      openDropDown: true
+    });
+    this.peekCartItems(this.props.user);
+  };
+
+  handleCloseDropDown = () => {
+    this.setState({
+      openDropDown: false
+    });
+  };
+
+  
   logoutHandler = () => {
     this.props.dispatch(logoutUser()).then(res => {
       if (res.payload.success) {
@@ -74,89 +126,41 @@ class Header extends Component {
     });
   };
 
-  defaultLink = (item, i) =>
-    item.name === "Log out" ? (
-      <div
-        className="log_out_link"
-        key={i}
-        onClick={() => this.logoutHandler()}
-      >
-        {item.name}
-      </div>
-    ) : (
-      <Link to={item.linkTo} key={i}>
-        {item.name}
-      </Link>
-    );
-
-
-
-  cartLink = (item, i) => {
-    const user = this.props.user.userData;
-    const { classes } = this.props;
-
-
-    return (
-      <div className="cart_link" key={i} style={{display: 'inline-flex', alignItems: 'center'}}>
-          <span>{user.cart 
-            ? <IconButton aria-label="Cart" classes={{root: classes.root}}>
-                <Badge badgeContent={user.cart.length} color="primary" classes={{ badge: classes.badge }}>
-                  <ShoppingCartIcon />
-                </Badge>
-              </IconButton>
-            : <IconButton aria-label="Cart">
-                <Badge badgeContent={0} color="primary">
-                  <ShoppingCartIcon />
-                </Badge>
-              </IconButton>
-          }</span>
-        <Link style={{marginLeft: '0'}} to={item.linkTo}>{item.name}</Link>
-      </div>
-    );
-  };
-
-  showLinks = type => {
-    let list = [];
-
-    if (this.props.user.userData) {
-      type.forEach(item => {
-        if (!this.props.user.userData.isAuth) {
-          if (item.public) {
-            list.push(item);
-          }
-        } else {
-          if (item.name !== "Log in") {
-            list.push(item);
-          }
-        }
-      });
-    }
-
-    return list.map((item, i) => {
-      if (item.name !== "My Cart") {
-        return this.defaultLink(item, i);
-      } else {
-        return this.cartLink(item, i);
-      }
-    });
-  };
-
   render() {
-    
-
-   
-    
     return (
       <header className="bck_b_light">
         <div className="container">
           <div className="left">
-            <Link to="/" className="logo">Waves</Link>
+            <Link to="/" className="logo">
+              Waves
+            </Link>
           </div>
 
           <div className="right">
-            <div className="top" style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>{this.showLinks(this.state.user)}</div>
+            <ShowLinks
+              links={this.state.userLinks}
+              user={this.props.user}
+              isLoading={this.state.isLoading}
+              className="top"
+              styles={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end"
+              }}
+              logoutHandler={() => this.logoutHandler()}
+              openDropDown={this.state.openDropDown}
+              handleOpenDropDown={() => this.handleOpenDropDown()}
+              handleCloseDropDown={() => this.handleCloseDropDown()}
+              total={this.state.total}
+              showTotal={this.state.showTotal}
+              removeFromCart={(id) => this.removeFromCart(id)}
+            />
 
-            <div className="bottom">{this.showLinks(this.state.page)}</div>
+            <ShowLinks
+              links={this.state.pageLinks}
+              user={this.props.user}
+              className="bottom"
+            />
           </div>
         </div>
       </header>
@@ -170,8 +174,4 @@ function mapStateToProps(state) {
   };
 }
 
-Header.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default connect(mapStateToProps)(withRouter(withStyles(styles)(Header)));
+export default connect(mapStateToProps)(withRouter(Header));

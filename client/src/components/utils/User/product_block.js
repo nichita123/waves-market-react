@@ -41,11 +41,16 @@ const ProductBlock = ({ products, removeItem, editProduct, type }) => {
                 <dd>{product.frets}</dd>
               </dl>
             </td>
-            <td className="quantity ta_center">{product.quantity}</td>
+            <td className="quantity ta_center">
+              <h6>Quantity</h6>
+              {product.quantity}
+            </td>
             <td className="price ta_center">
+              <h6>Price</h6>
               ${product.price * product.quantity}
             </td>
             <td className="remove ta_center">
+            <h6>Remove</h6>
             <Tooltip title="Remove from cart">
               <FontAwesomeIcon
                 icon={faTrash}
@@ -62,7 +67,7 @@ const ProductBlock = ({ products, removeItem, editProduct, type }) => {
       ? products.toShop.map(product => (
           <tr key={product._id}>
             <td
-              width="20%"
+              width="15%"
               className="table_image"
               style={{
                 minWidth: "58px"
@@ -74,7 +79,7 @@ const ProductBlock = ({ products, removeItem, editProduct, type }) => {
                 alt="Product"
               />
             </td>
-            <td width="20%" className="product_info">
+            <td width="25%" className="product_info">
               <h4>{product.name}</h4>
 
               <dl className="characteristics">

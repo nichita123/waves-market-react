@@ -1,3 +1,7 @@
+*{
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -364,8 +368,8 @@ header .container .right .top {
 }
 
 header .cart_link {
-  display: inline-block;
-  position: relative;
+  display: inline-flex;
+  align-items: center;
 }
 
 header .cart_link_counter{
@@ -749,6 +753,7 @@ footer .business_nfo .nfo {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap;
   text-transform: uppercase;
   border: 1px solid #e7e7e7;
   background: #f7f7f7;
@@ -965,6 +970,10 @@ footer .business_nfo .nfo {
   border-bottom: 1px solid #e5e5e5;
 }
 
+.cart_table_body h6{
+  display: none;
+}
+
 .cart_table_header .cart_table_th{
   padding: 20px 10px;
   font-size: 14px;
@@ -1074,6 +1083,99 @@ footer .business_nfo .nfo {
   order: 1;
 }
 
+.dropdown_menu{
+  position: absolute;
+  display: block;
+  top: 34px;
+  left: -10px;
+  list-style: none;
+  background: #fff;
+  width: 256px;
+  height: 300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  box-shadow: 0px 0px 15px -4px rgba(0,0,0,0.62);
+  cursor: default;
+}
+
+.dropdown_menu_end{
+  position: absolute;
+  top: 330px;
+  right: -222px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 256px;
+  height: 40px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 1px 4px 15px -4px rgba(0,0,0,0.6);
+  text-align: right;
+  padding: 0 20px;
+}
+
+.dropdown_menu_end a{
+  font-size: 18px;
+  text-decoration: underline;
+}
+
+span.dropdown_menu_end_total{
+  font-size: 16px;
+  text-align: left;
+}
+
+.dropdown_menu_arrow{
+  position: absolute;
+  top: 6px;
+  z-index: 100;
+  font-size: 40px;
+  color: white;
+}
+
+.dropdown_menu_image{
+  max-width: 60px;
+  min-width: 60px;
+  height: auto;
+}
+
+.dropdown_menu_empty_cart{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 10px;
+}
+
+.dropdown_menu_empty_cart h6{
+  margin: 2px 0;
+}
+
+.dropdown_menu_empty_cart a{
+  font-size: 16px;
+  text-decoration: underline;
+  text-align: center;
+  margin: 10px 0;
+  padding: 0;
+}
+
+.item_info_wrapper{
+  display: flex;
+  flex-direction: column;
+  padding: 0 15px;
+}
+
+.item_info_wrapper div {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.item_info_wrapper div p{
+  font-size: 12px !important;
+  font-weight: bold !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 textarea{
   border: 1px solid #999592 !important;
   padding: 10px !important;
@@ -1100,6 +1202,39 @@ textarea{
   .page_wrapper{
     padding: 86px 40px;
   }
+  .cart_table_header{
+    display: none;
+  }
+  .cart_table_body tr{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 20px;
+  }
+  .cart_table_header, .cart_table_body td{
+    border: none;
+    flex-basis: 15%;
+  }
+  .cart_table_header, .cart_table_body .table_image{
+    padding: 0;
+  }
+  .cart_table_header, .cart_table_body .product_info{
+    margin-bottom: 0;
+    flex-basis: 40%;
+  }
+  .cart_table_body h6{
+    display: block;
+    margin: 0 0 20px;
+  }
+  td.ta_center{
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: center;
+    min-height: 70px;
+  }
 }
 
 @media (max-width: 820px){
@@ -1114,6 +1249,15 @@ textarea{
   }
   .admin_two_column{
     flex-direction: column;
+  }
+  .cart_table_body td:not(.table_image){
+    flex-basis: 33%;
+  }
+  .cart_table_body .table_image{
+    min-width: 50px;
+  }
+  .cart_table_body .product_info{
+    flex-basis: 75% !important; 
   }
 }
 
@@ -1178,7 +1322,7 @@ textarea{
   header .container .right .top{
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: flex-end !important;
   }
   header .container .right .top, header .container .right .bottom{
     padding: 7px 10px !important;
@@ -1192,6 +1336,13 @@ textarea{
   }
   .page_top{
     padding: 50px 0px 20px 10px !important;
+  }
+  .card_item_wrapper{
+    padding-bottom: 25px;
+    padding-top: 30px;
+  }
+  .card_item_wrapper:nth-of-type(2n){
+    background: #8080801f;
   }
 }
 
