@@ -18,7 +18,7 @@ class Paypal extends Component {
       console.log(JSON.stringify(err))
     }
 
-    let env = 'sandbox';
+    let env = 'production';
     let currency = 'USD';
     let total = this.props.toPay;
 
