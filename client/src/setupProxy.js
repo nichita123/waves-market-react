@@ -2,6 +2,6 @@ const proxy = require('http-proxy-middleware');
 
 module.exports = function(app) {
     app.use(proxy('/api/', 
-        { target: 'https://still-castle-85865.herokuapp.com' }
+        { target: 'http://localhost:3002' }
     ));
 }
