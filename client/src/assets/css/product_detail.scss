@@ -1,0 +1,150 @@
+@import "./variables";
+
+.product_detail_wrapper {
+  display: flex;
+  margin-bottom: 140px;
+
+  p {
+    font-size: 17px;
+    font-weight: lighter;
+    border: 1px solid $grey-color;
+    padding: 10px;
+  }
+
+  .right {
+    flex-basis: 60%;
+    padding: 0 15px;
+  }
+
+  .left {
+    flex-basis: 40%;
+    padding: 0 15px;
+  }
+
+  .product_tags {
+    padding-bottom: 10px;
+    border-bottom: 1px solid $grey-color;
+
+    .tag {
+      display: flex;
+
+      &:nth-child(1){
+        margin-bottom: 20px;
+      }
+
+      svg {
+        font-size: 43px;
+        color: $secondary-color;
+        width: 45px;
+      }
+
+      .tag_text {
+        font-size: 14px;
+        text-transform: uppercase;
+        color: $darkest-grey-color;
+        padding-left: 20px;
+      }
+    }
+  }
+
+  .product_actions {
+    padding: 20px 0px 30px 0px;
+    border-bottom: 1px solid $grey-color;
+
+    .price {
+      font-size: $logo-font-size;
+      font-weight: 300;
+    }
+
+    .cart {
+      width: 150px;
+    }
+  }
+
+  .product_specifications {
+    .item {
+      font-size: 15px;
+      text-transform: uppercase;
+      color: $darkest-grey-color;
+    }
+  }
+
+  .product_image_container {
+    margin-top: 30px;
+  }
+
+  .main_pic {
+    cursor: pointer;
+
+    div {
+      width: 100%;
+      height: 446px;
+      border: 1px solid $grey-color;
+      background-size: cover !important;
+      background-position: center center !important;
+    }
+  }
+
+  .main_thumbs {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+
+    .thumb {
+      cursor: pointer;
+      height: 100px;
+      flex-basis: 50%;
+      background-size: cover !important;
+      background-position: bottom center !important;
+      border: 1px solid $grey-color;
+    }
+  }
+}
+
+//MEDIA QUERIES
+
+@media (max-width: 750px){
+  .product_detail{
+    &_wrapper{
+      flex-direction: column;
+      padding: 40px;
+
+      p{
+        margin: 30px 0;
+      }
+    }
+
+    &_info{
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      padding: 20px;
+      border-bottom: 1px solid $link-default-bg;
+      border-top: 1px solid $link-default-bg;
+
+      .product_tags, .product_actions, .product_specifications{
+        border: none;
+        padding: 0;
+        margin-right: 30px;
+      }
+
+      .product_specifications{
+        margin: 0;
+
+        h2{
+          margin: 5px 0;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 531px){
+  .product_tags, .product_actions, .product_specifications{
+    flex-basis: 100%;
+  }
+  .product_specifications, .product_actions{
+    margin-top: 10px !important;
+  }
+}

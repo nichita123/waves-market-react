@@ -206,8 +206,8 @@ ShowLinks.propTypes = {
 
 const styles = theme => ({
   badge: {
-    top: "30%",
-    right: 28,
+    top: 3,
+    right: 25,
     // The border color match the background color.
     border: `2px solid ${
       theme.palette.type === "light"
@@ -217,7 +217,6 @@ const styles = theme => ({
   },
   root: {
     padding: "0",
-    marginRight: "3px",
     position: "relative"
   },
   ListItemRoot: {

@@ -83,9 +83,11 @@ const ProductNFO = props => {
         {detail.brand.name} {detail.name}
       </h1>
       <p>{detail.desc}</p>
-      { showProductTags(detail) }
-      { showProductActions(detail) }
-      { showProductSpecs(detail) }
+      <div className="product_detail_info">
+        { showProductTags(detail) }
+        { showProductActions(detail) }
+        { showProductSpecs(detail) }
+      </div>
     </div>
   );
 };

@@ -1,0 +1,134 @@
+@import './variables';
+
+.card_item_wrapper {
+  padding: 0 20px;
+  flex-basis: 25%;
+
+  .image {
+    width: 100%;
+    height: 280px;
+    background-position: center !important;
+    background-size: cover !important;
+  }
+
+  .tags {
+    border-bottom: 1px solid #f0f0f0;
+
+    %tags{
+      text-align: center;
+      margin: 5px;
+      font-weight: 700;
+      font-size: 21px;
+    }
+
+    .brand {
+      @extend %tags;
+      font-size: 17px;
+      color: #860b31;
+    }
+
+    .name {
+      @extend %tags;
+    }
+
+    .price {
+      @extend %tags;
+      font-weight: 300;
+    }
+  }
+
+  .actions {
+    display: flex;
+    padding: 15px 0 10px 0;
+
+    .button_wrap:nth-child(1) {
+      flex-grow: 1;
+      padding-right: 10px;
+    }
+  }
+
+  &.grid_bars {
+    width: 100%;
+    display: flex;
+
+    .image {
+      min-width: 150px;
+      background-size: contain !important;
+      max-width: 250px;
+      width: 100%;
+      min-height: 211px;
+      height: 100%;
+      border: none;
+      margin: 0 auto;
+    }
+
+    .action_container {
+      border: 1px solid #e6e6e6;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .description {
+      clear: both;
+      padding: 0px 25px;
+      border-top: 1px solid #eeeeee;
+    }
+
+    .tags {
+      border-bottom: 0px;
+      padding: 5px 20px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: baseline;
+
+      .brand {
+        font-size: 21px;
+      }
+
+      .price {
+        align-self: flex-end;
+        margin-left: auto;
+      }
+    }
+
+    .actions {
+      padding: 10px 20px 10px 15px;
+      margin-top: auto;
+    }
+  }
+}
+
+//MEDIA QUERIES
+
+@media (max-width: 887px) {
+  .card_item_wrapper{
+    flex-basis: 50% !important;
+  }
+}
+
+@media (max-width: 820px){
+  .card_item_wrapper.grid_bars{
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 455px) {
+  .card_item_wrapper{
+    flex-basis: 100% !important;
+    padding: 20px;
+    
+    .action_container{
+      border: none !important;
+    }
+
+    &:nth-of-type(2n){
+      background: $link-default-bg;
+    }
+
+    .image{
+      background-size: contain !important;
+    }
+  }
+}

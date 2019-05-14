@@ -1,0 +1,57 @@
+@import './variables';
+
+a {
+  text-decoration: none;
+  color: $a-color;
+}
+
+%shop_link{
+  width: 100%;
+  border: 1px solid $darker-grey-color;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: $link-color;
+  background: $link_bg;
+  transition: all 200ms ease-in;
+  cursor: pointer;
+
+  &:hover{
+    background: $link_hover_bg;
+    color: $link-hover-color;
+  }
+}
+
+.link_default {
+  color: $white-color;
+  text-transform: uppercase;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+}
+
+.bag_link{
+  @extend %shop_link;
+  display: block;
+  text-align: center;
+}
+
+.card_link{
+  @extend %shop_link;
+}
+
+.add_to_cart_link {
+  @extend %shop_link;
+  color: $link-shop-color;
+  background: $link-shop-bg;
+
+  svg{
+    margin-right: 10px;
+  }
+}
+
+

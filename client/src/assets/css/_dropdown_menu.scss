@@ -1,0 +1,121 @@
+@import './variables';
+
+.dropdown_menu {
+  position: absolute;
+  display: block;
+  top: 34px;
+  left: -8px;
+  list-style: none;
+  background: $white-color;
+  width: 256px;
+  height: 300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  box-shadow: 0px 0px 15px -4px rgba(0, 0, 0, 0.62);
+  cursor: default;
+
+  &_arrow {
+    position: absolute;
+    top: 6px;
+    z-index: 100;
+    font-size: 40px;
+    color: $white-color;
+  }
+
+  &_image {
+    max-width: 60px;
+    min-width: 60px;
+    height: auto;
+  }
+
+  &_empty_cart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px 10px;
+
+    h6 {
+      margin: 2px 0;
+      color: $link-shop-color;
+    }
+
+    a {
+      color: $darkest-grey-color;
+      font-size: 16px;
+      text-decoration: underline;
+      text-align: center;
+      margin: 10px 0;
+      padding: 0;
+
+      &:hover{
+        color: $link-color;
+      }
+    }
+  }
+
+  .item_info_wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px;
+
+    div {
+      padding: 0 !important;
+      margin: 0 !important;
+
+      span{
+        font-weight: 600;
+      }
+
+      p {
+        font-size: 12px !important;
+        font-weight: bold !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+    }
+  }
+
+  .remove {
+    svg{
+      color: $darkest-grey-color;
+    }
+    
+
+    &:hover svg{
+      color: $secondary-color;
+    }
+  }
+
+  &_end {
+    position: absolute;
+    top: 330px;
+    right: -213px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 256px;
+    height: 40px;
+    background: $white-color;
+    overflow: hidden;
+    box-shadow: 1px 4px 15px -4px rgba(0, 0, 0, 0.6);
+    text-align: right;
+    padding: 0 20px;
+    color: $darkest-grey-color;
+
+    a {
+      font-size: 18px;
+      text-decoration: underline;
+      color: $darkest-grey-color;
+
+      &:hover{
+        color: $link-color;
+      }
+    }
+
+    &_total {
+      font-size: 16px;
+      text-align: left;
+    }
+  }
+}

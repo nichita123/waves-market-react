@@ -100,7 +100,7 @@ class Cart extends Component {
         />
       </div>
     ) : (
-      <div className="cart_no_items">
+      <div className="no_result">
         <FontAwesomeIcon icon={faFrown} />
         <div>Your cart is empty...</div>
       </div>

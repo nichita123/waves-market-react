@@ -1,0 +1,59 @@
+@import './variables';
+
+.register_login_container {
+  display: flex;
+  align-items: baseline;
+  border: 1px solid $darkest-grey-color;
+  border-top: 5px solid $darkest-grey-color;
+  padding: 80px 40px;
+
+  .left, .right{
+    flex-basis: 100%;
+  }
+
+  h2 {
+    margin: 20px 0px;
+    text-transform: uppercase;
+    color: $primary-color;
+  }
+
+  p {
+    font-weight: 300;
+    font-size: 16px;
+    padding: 0 60px 0 0;
+  }
+
+  input{
+    margin: 0;
+  }
+
+  .signin_login{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0 10px 0 0;
+
+    a {
+      color: $darkest-grey-color;
+      
+      &:hover{
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+//MEDIA QUERIES
+
+@media (max-width: 455px) {
+  .register_login_container{
+    flex-direction: column;
+
+    .right{
+      order: -1;
+    }
+  }
+}
+
+
+

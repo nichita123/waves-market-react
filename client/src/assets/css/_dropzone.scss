@@ -1,0 +1,41 @@
+@import './variables';
+
+.dropzone {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  border: 1px solid $link-default-bg;
+  margin-bottom: 40px;
+
+  &_box{
+    flex-basis: 33%;
+    max-width: 202px;
+    min-width: 150px;
+    height: 160px;
+    padding: 10px;
+
+    .wrap {
+      background: $grey-color;
+      height: 100%;
+      text-align: center;
+      padding-top: 31px;
+      font-size: $logo-font-size + 5;
+      background-size: contain !important;
+      background-position: center center !important;
+      border: 1px solid $grey-color;
+    }
+  }
+}
+
+//MEDIA QUERIES 
+
+@media (max-width: 758px){
+  .dropzone_box{
+    flex-basis: 50%;
+  }
+}
+@media (max-width: 358px){
+  .dropzone_box{
+    min-width: 100%;
+  }
+}

@@ -18,6 +18,7 @@ const RegisterLogin = () => {
               addStyles={{
                 margin: '10px 0 0 0'
               }}
+              altClass="signup_button"
             />
           </div>
 

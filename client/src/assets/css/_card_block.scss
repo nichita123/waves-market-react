@@ -1,0 +1,26 @@
+@import './variables';
+
+.card_block {
+  margin: 110px 0px;
+
+  .title {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: $logo-font-size - 15;
+    margin-bottom: 50px;
+  }
+
+  &_shop {
+    .card_item_wrapper {
+      flex-basis: 33%;
+      margin-bottom: 20px;
+    }
+
+    &_wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: center;
+    }
+  }
+}

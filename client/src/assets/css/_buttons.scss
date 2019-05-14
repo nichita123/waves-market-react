@@ -1,0 +1,149 @@
+@import './variables';
+
+%super_button {
+  cursor: pointer;
+  color: $white-color;
+  font-size: 18px;
+  text-transform: uppercase;
+  padding: 10px 60px;
+  display: table;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: -2;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #383838;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 20px;
+    height: 100%;
+    top: 0;
+    background: #2c2c2d;
+    left: 50%;
+    cursor: pointer;
+    transform: translate(-50%) skew(20deg) scaleX(1);
+    transition: width 0.36s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  &:hover::after {
+    width: 120%;
+  }
+}
+
+.load_more_button {
+  margin-bottom: 50px;
+  border-top: 5px solid #f5f5f5;
+  padding-top: 20px;
+
+  span {
+    @extend %super_button;
+  }
+}
+
+.featured_action {
+  .my_link {
+    @extend %super_button;
+    margin: 20px 0;
+    padding: 10px 25px;
+    z-index: 100;
+  }
+}
+
+.home_promotion {
+  .my_link {
+    @extend %super_button;
+    z-index: 100;
+    margin: 20px auto;
+    padding: 10px 25px;
+  }
+}
+
+%auth_buttons{
+  width: 100px;
+  height: 40px;
+  background: $secondary-color;
+  border: none;
+  position: relative;
+  color: #fbfbfb;
+  font-weight: 600;
+  font-family: "Open Sans", sans-serif;
+  font-size: 15px;
+  text-align: left;
+  text-indent: 5px;
+  cursor: pointer;
+  display: block;
+  margin-bottom: 20px;
+  outline: none;
+  
+
+  &:hover{
+    &::before, &::after{
+      background: $secondary-color;
+    }
+  }
+
+  &::before{
+    content: "";
+    width: 20px;
+    height: 20px;
+    display: block;
+    transform: translate(30%) skew(30deg);
+    background: #2c2c2d;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .3s
+  }
+
+  &::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    display: block;
+    transform: translate(30%) skew(-30deg);
+    background: #2c2c2d;
+    position: absolute;
+    right: 0;
+    top: 20px;
+    transition: .3s
+  }
+}
+
+.login_button {
+  @extend %auth_buttons;
+}
+
+.signup_button{
+  @extend %auth_buttons;
+
+  width: 200px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px;
+  text-transform: uppercase;
+  background: #2c2c2d;
+
+  &::after, &::before{
+    background: $white-color;
+    cursor: default;
+  }
+
+  &:hover{
+    &::before, &::after{
+      background: $white-color;
+    }
+  }
+}

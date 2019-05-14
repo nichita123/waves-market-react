@@ -15,7 +15,7 @@ import Reducer from "./redux/reducers";
 
 import ScrollToTop from "./hoc/ScrollToTop";
 
-import "./assets/css/app.css";
+import './assets/css/main.scss';
 
 const createStoreWithMiddleware = applyMiddleware(
   promiseMiddleware,

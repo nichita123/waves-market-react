@@ -144,8 +144,15 @@ class Login extends Component {
           {this.state.formError ? (
             <div className="error_label">Please check your data</div>
           ) : null}
-          <button onClick={event => this.submitForm(event)}>Log in</button>
-          <Link to="/reset-user">Forgot password?</Link>
+          <div className="signin_login">
+            <button 
+              onClick={event => this.submitForm(event)}
+              className="login_button"
+            >
+              Log in
+            </button>
+            <Link to="/reset-user">Forgot password?</Link>
+          </div>
         </form>
       </div>
     );

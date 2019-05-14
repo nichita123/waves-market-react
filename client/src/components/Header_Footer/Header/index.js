@@ -128,7 +128,7 @@ class Header extends Component {
 
   render() {
     return (
-      <header className="bck_b_light">
+      <header className="bck_b_dark">
         <div className="container">
           <div className="left">
             <Link to="/" className="logo">
@@ -142,11 +142,6 @@ class Header extends Component {
               user={this.props.user}
               isLoading={this.state.isLoading}
               className="top"
-              styles={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end"
-              }}
               logoutHandler={() => this.logoutHandler()}
               openDropDown={this.state.openDropDown}
               handleOpenDropDown={() => this.handleOpenDropDown()}

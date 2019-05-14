@@ -1,0 +1,29 @@
+@import "./variables";
+
+.history_blocks {
+  table {
+    tr {
+      text-align: left;
+      height: 35px;
+
+      &:nth-of-type(even) {
+        background: $grey-color;
+
+        & td {
+          border: 1px solid $white-color;
+        }
+      }
+
+      & td {
+        padding: 0 5px;
+        border: 1px solid $grey-color;
+      }
+    }
+
+    .thead_tr {
+      height: 50px;
+      font-family: "Gothic A1", sans-serif;
+      font-size: 16px;
+    }
+  }
+}
