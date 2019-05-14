@@ -40,6 +40,10 @@ body{
   padding-top: 85px;
 }
 
+.page_wrapper{
+  padding: 80px;
+}
+
 .main_loader {
   text-align: center;
   margin-top: 100px;
@@ -89,6 +93,18 @@ tr:nth-child(even):not(table .cart_table) {
 @media (max-width: 1024px) {
   .page_container{
     min-height: 74vh;
+  }
+}
+
+@media (max-width: 770px) {
+  .page_wrapper{
+    padding: 80px 20px;
+  }
+}
+
+@media (max-width: 375px) {
+  .page_wrapper{
+    padding: 40px 15px;
   }
 }
 

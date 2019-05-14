@@ -45,12 +45,34 @@
 
 //MEDIA QUERIES
 
-@media (max-width: 455px) {
+@media (max-width: 600px) {
   .register_login_container{
     flex-direction: column;
 
     .right{
       order: -1;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .register_login_container{
+    padding: 40px 20px;
+  }
+}
+
+@media (max-width: 330px) {
+  .signin_login{
+    flex-direction: column;
+  }
+
+  .register_login_container{
+    h1, h2{
+      font-size: $logo-font-size - 20;
+    }
+
+    p{
+      padding: 0;
     }
   }
 }
