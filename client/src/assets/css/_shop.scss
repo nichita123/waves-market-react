@@ -9,7 +9,7 @@
 
   &_wrapper {
     display: flex;
-    padding: 20px 10px 60px;
+    padding: 20px 20px 60px 20px;
   }
 
   &_options {
@@ -19,6 +19,7 @@
 
   .left {
     flex-basis: 20%;
+    min-width: 175px;
   }
 
   .right {

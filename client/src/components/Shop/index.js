@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 
 import PageTop from "../utils/page_top.js";
 
@@ -23,8 +24,17 @@ import faTh from "@fortawesome/fontawesome-free-solid/faTh";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import { withStyles } from '@material-ui/core/styles';
+
+
+
 class Shop extends Component {
   state = {
+    mobileOpen: false,
     isLoading: true,
     grid: "",
     limit: 6,
@@ -118,41 +128,82 @@ class Shop extends Component {
     });
   };
 
+  handleDrawerToggle = () => {
+    this.setState(state => ({ mobileOpen: !state.mobileOpen }));
+  };
+
   render() {
-    const { product } = this.props;
+    const { product, classes } = this.props;
+
+    const drawer = (
+      <div className="left">
+      <CollapseCheckbox
+        initState={true}
+        title="Brands"
+        list={this.props.product.brands}
+        handleFilters={filters => this.handleFilters(filters, "brand")}
+      />
+      <CollapseCheckbox
+        initState={false}
+        title="Frets"
+        list={frets}
+        handleFilters={filters => this.handleFilters(filters, "frets")}
+      />
+      <CollapseCheckbox
+        initState={false}
+        title="Wood"
+        list={this.props.product.woods}
+        handleFilters={filters => this.handleFilters(filters, "wood")}
+      />
+      <CollapseRadio
+        initState={true}
+        title="Price"
+        list={price}
+        handleFilters={filters => this.handleFilters(filters, "price")}
+      />
+    </div>
+  )
 
     return (
       <div className="shop">
         <PageTop title="Browse Products" />
         <div className="container">
           <div className="shop_wrapper">
-            <div className="left">
-              <CollapseCheckbox
-                initState={true}
-                title="Brands"
-                list={product.brands}
-                handleFilters={filters => this.handleFilters(filters, "brand")}
-              />
-              <CollapseCheckbox
-                initState={false}
-                title="Frets"
-                list={frets}
-                handleFilters={filters => this.handleFilters(filters, "frets")}
-              />
-              <CollapseCheckbox
-                initState={false}
-                title="Wood"
-                list={product.woods}
-                handleFilters={filters => this.handleFilters(filters, "wood")}
-              />
-              <CollapseRadio
-                initState={true}
-                title="Price"
-                list={price}
-                handleFilters={filters => this.handleFilters(filters, "price")}
-              />
+            <div className="toggle_shop_menu">
+              <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={this.handleDrawerToggle}
+                className={classes.menuButton}
+              >
+                <MenuIcon />
+              </IconButton>
             </div>
-
+            <Hidden smUp>
+              <Drawer
+                container={this.props.container}
+                variant="temporary"
+                anchor="left"
+                open={this.state.mobileOpen}
+                onClose={this.handleDrawerToggle}
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+            <Hidden xsDown>
+              <Drawer
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                variant="persistent"
+                open
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
             <div className="right">
               <div className="shop_options">
                 <div className="shop_grids">
@@ -204,4 +255,36 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Shop);
+const drawerWidth = 250;
+
+const styles = theme => ({
+  root: {
+    display: 'flex',
+  },
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  menuButton: {
+    marginRight: 20,
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  drawerPaper: {
+    width: drawerWidth,
+    position: 'inherit',
+    border: 'none',
+    padding: '15px'
+  }
+});
+
+Shop.propTypes = {
+  classes: PropTypes.object.isRequired,
+  container: PropTypes.object,
+  theme: PropTypes.object.isRequired,
+};
+
+export default connect(mapStateToProps)(withStyles(styles)(Shop));
